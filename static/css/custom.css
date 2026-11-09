@@ -1,0 +1,107 @@
+/* CampusCare Custom Aesthetics */
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Status Badges */
+.badge-status-SUBMITTED {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.badge-status-UNDER_REVIEW {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
+}
+.badge-status-ASSIGNED {
+  background-color: #e0e7ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+}
+.badge-status-IN_PROGRESS {
+  background-color: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.badge-status-ON_HOLD {
+  background-color: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+.badge-status-RESOLVED {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+.badge-status-CLOSED {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+.badge-status-REJECTED {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+.badge-status-REOPENED {
+  background-color: #ffe4e6;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+/* Priority Badges */
+.badge-priority-EMERGENCY {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+  font-weight: 800;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.badge-priority-HIGH {
+  background-color: #ffedd5;
+  color: #9a3412;
+  border: 1px solid #fdba74;
+  font-weight: 700;
+}
+.badge-priority-MEDIUM {
+  background-color: #fef9c3;
+  color: #854d0e;
+  border: 1px solid #fde047;
+  font-weight: 600;
+}
+.badge-priority-LOW {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Timeline node styles */
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+.timeline-dot {
+  position: absolute;
+  left: -1.75rem;
+  top: 0.15rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px #93c5fd;
+}

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: campuscare
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: PARENT_NOTIFICATION_EMAIL
+        value: anilanji22515@gmail.com
+      - key: EMAIL_ENABLED
+        value: false

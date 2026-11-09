@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusCare - Campus Problem Reporting and Management System</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Top Navigation Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & System Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+          <i class="fa-solid fa-building-shield text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-extrabold tracking-tight text-slate-900">Campus<span class="text-blue-600">Care</span></span>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Prototype v2.0</span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Campus Problem Reporting & Management System</p>
+        </div>
+      </div>
+
+      <!-- Center: Instant Role Switcher for Demo Evaluator -->
+      <div id="demo-role-bar" class="hidden md:flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold text-slate-600 border border-slate-200">
+        <span class="px-2 text-slate-400 font-medium">Demo Switch:</span>
+        <button onclick="demoLogin('student')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="student">
+          <i class="fa-solid fa-user-graduate mr-1 text-blue-500"></i>Student
+        </button>
+        <button onclick="demoLogin('staff')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="staff">
+          <i class="fa-solid fa-wrench mr-1 text-amber-500"></i>Staff
+        </button>
+        <button onclick="demoLogin('department_head')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="department_head">
+          <i class="fa-solid fa-user-tie mr-1 text-indigo-500"></i>Dept Head
+        </button>
+        <button onclick="demoLogin('admin')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="admin">
+          <i class="fa-solid fa-shield-halved mr-1 text-emerald-500"></i>Admin
+        </button>
+      </div>
+
+      <!-- Right User Controls -->
+      <div class="flex items-center space-x-3">
+        <!-- In-App Notifications -->
+        <div class="relative" id="notif-wrapper">
+          <button id="notif-btn" onclick="toggleNotifications()" class="relative p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-full transition">
+            <i class="fa-regular fa-bell text-lg"></i>
+            <span id="notif-badge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+          </button>
+          
+          <!-- Dropdown Panel -->
+          <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 overflow-hidden">
+            <div class="p-3 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">In-App Notifications</span>
+              <span id="notif-count-text" class="text-xs text-blue-600 font-medium">0 updates</span>
+            </div>
+            <div id="notif-list" class="max-h-72 overflow-y-auto divide-y divide-slate-100 p-1">
+              <div class="p-4 text-center text-xs text-slate-400">No new notifications</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Profile Pill -->
+        <div id="user-profile-pill" class="hidden items-center space-x-2 pl-2 border-l border-slate-200">
+          <div class="text-right">
+            <div id="nav-user-name" class="text-xs font-bold text-slate-800 leading-tight">User</div>
+            <div id="nav-user-role" class="text-[10px] font-semibold text-blue-600 uppercase">Role</div>
+          </div>
+          <button onclick="logout()" title="Logout" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+
+        <!-- Auth Button if Logged Out -->
+        <button id="nav-login-btn" onclick="openAuthModal()" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition">
+          Sign In
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Emergency Banner Alert Component -->
+  <div id="emergency-alert-bar" class="hidden bg-gradient-to-r from-red-600 to-rose-700 text-white px-4 py-2 text-xs font-medium text-center flex items-center justify-center space-x-2 shadow-inner">
+    <i class="fa-solid fa-triangle-exclamation animate-bounce text-sm"></i>
+    <span><strong>EMERGENCY NOTICE:</strong> Immediate danger to life or safety? Call Campus Security directly at <strong>+91-911 / Ext. 911</strong> or Health Clinic at <strong>Ext. 108</strong>. Submitting a ticket does not replace urgent calls!</span>
+  </div>
+
+  <!-- Main App Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- 1. GUEST / LANDING HERO (Shown if not logged in) -->
+    <div id="view-landing" class="hidden space-y-12 py-8">
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <span class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
+          <i class="fa-solid fa-sparkles text-blue-500"></i>
+          <span>Centralized & Transparent Campus Problem Resolution</span>
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+          Report campus issues effortlessly, track progress transparently.
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+          One unified platform for students, faculty, and administrators. Auto-routes complaints to responsible maintenance departments, sends verified parent notifications, and monitors SLAs.
+        </p>
+
+        <!-- Fast Demo Quick Launcher -->
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+          <button onclick="demoLogin('student')" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition flex items-center space-x-2">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>Demo as Student (Rahul)</span>
+          </button>
+          <button onclick="demoLogin('staff')" class="px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold text-sm shadow-xs transition flex items-center space-x-2">
+            <i class="fa-solid fa-wrench text-amber-500"></i>
+            <span>Demo as Staff</span>
+          </button>
+          <button onclick="demoLogin('admin')" class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-semibold text-sm shadow-md transition flex items-center space-x-2">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+            <span>Demo as Administrator</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature Highlight Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Smart Automatic Routing</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Complaints in 16 categories automatically dispatch to Plumbing, Electrical, IT, Civil, Mess, or Security queues with SLA deadlines.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Automated Notifications</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Backend triggers instant notification dispatch to configured parent/guardian recipient (<code>anilanji22515@gmail.com</code>) with outbox tracking.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4">
+            <i class="fa-solid fa-timeline"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 mb-2">Transparent Status Workflow</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Full audit timeline: Submitted &rarr; Assigned &rarr; In Progress &rarr; Resolved &rarr; Feedback. Internal notes protected.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. STUDENT DASHBOARD VIEW -->
+    <div id="view-student" class="hidden space-y-6">
+      
+      <!-- Top Actions & Profile Bar -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-1">
+            <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-semibold">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span id="student-branch-year">Student Portal • Computer Science - Year 2</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Welcome, <span id="student-name-display">Rahul</span></h2>
+            <p class="text-blue-100 text-xs sm:text-sm max-w-xl">
+              Report campus problems with evidence and track resolution milestones in real-time.
+            </p>
+          </div>
+          
+          <button onclick="openComplaintModal()" class="self-start md:self-auto px-6 py-3.5 bg-white text-blue-700 hover:bg-blue-50 font-bold text-sm rounded-2xl shadow-lg transition flex items-center space-x-2 shrink-0">
+            <i class="fa-solid fa-plus-circle text-lg"></i>
+            <span>Report a Campus Problem</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-slate-400 text-xs font-semibold">Total Submitted</div>
+          <div id="stat-student-total" class="text-2xl font-black text-slate-900 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-blue-500 text-xs font-semibold">Under Review</div>
+          <div id="stat-student-review" class="text-2xl font-black text-blue-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-amber-500 text-xs font-semibold">In Progress</div>
+          <div id="stat-student-progress" class="text-2xl font-black text-amber-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-emerald-500 text-xs font-semibold">Resolved / Closed</div>
+          <div id="stat-student-resolved" class="text-2xl font-black text-emerald-600 mt-1">0</div>
+        </div>
+      </div>
+
+      <!-- Complaints Management Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">My Problem Reports</h3>
+            <p class="text-xs text-slate-500">Track all campus maintenance reports submitted by you</p>
+          </div>
+          
+          <div class="flex items-center space-x-3">
+            <select id="filter-student-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-700">
+              <option value="">All Statuses</option>
+              <option value="SUBMITTED">Submitted</option>
+              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="ASSIGNED">Assigned</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="CLOSED">Closed</option>
+            </select>
+
+            <div class="relative">
+              <input type="text" id="filter-student-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search ID, title..." class="text-xs bg-slate-50 border border-slate-300 rounded-xl pl-8 pr-3 py-2 w-48 focus:w-64 transition-all">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200">
+              <tr>
+                <th class="px-5 py-3">Complaint ID</th>
+                <th class="px-5 py-3">Title & Summary</th>
+                <th class="px-5 py-3">Category</th>
+                <th class="px-5 py-3">Location</th>
+                <th class="px-5 py-3">Priority</th>
+                <th class="px-5 py-3">Status</th>
+                <th class="px-5 py-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="student-complaints-tbody" class="divide-y divide-slate-100">
+              <!-- Dynamically Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. DEPARTMENT DASHBOARD (Staff & Head) -->
+    <div id="view-department" class="hidden space-y-6">
+      
+      <!-- Department Header -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800" id="dept-badge-role">Staff Portal</span>
+            <span class="text-xs text-slate-500" id="dept-assigned-name">Plumbing and Water Maintenance</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Department Action Queue</h2>
+          <p class="text-xs text-slate-500">Review tickets assigned to your department, update timelines, and upload resolution proof.</p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <select id="filter-dept-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-medium">
+            <option value="">All Statuses</option>
+            <option value="SUBMITTED">New (Submitted)</option>
+            <option value="ASSIGNED">Assigned</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="ON_HOLD">On Hold</option>
+            <option value="RESOLVED">Resolved</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Emergency / Urgent Notice Cards if any -->
+      <div id="dept-emergency-container" class="space-y-3">
+        <!-- Rendered if emergency exists -->
+      </div>
+
+      <!-- Department Queue Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+          <h3 class="text-sm font-bold text-slate-900">Assigned Department Complaints</h3>
+          <span id="dept-queue-count" class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-full">0 tickets</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200">
+              <tr>
+                <th class="px-5 py-3">ID & Priority</th>
+                <th class="px-5 py-3">Title & Issue</th>
+                <th class="px-5 py-3">Campus Location</th>
+                <th class="px-5 py-3">Assigned Staff</th>
+                <th class="px-5 py-3">SLA Due</th>
+                <th class="px-5 py-3">Status</th>
+                <th class="px-5 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dept-complaints-tbody" class="divide-y divide-slate-100">
+              <!-- Dynamically Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4. CAMPUS ADMINISTRATOR DASHBOARD -->
+    <div id="view-admin" class="hidden space-y-6">
+      
+      <!-- Admin Top Banner -->
+      <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-semibold">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Central Campus Administrator Console</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">CampusCare Operations & Analytics</h2>
+          <p class="text-slate-400 text-xs sm:text-sm max-w-xl">
+            Real-time campus problem telemetry, SLA compliance, department routing rules, and notification outbox audits.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="exportCSV()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center space-x-2">
+            <i class="fa-solid fa-file-csv text-emerald-400"></i>
+            <span>Export CSV</span>
+          </button>
+          <button onclick="openTestEmailModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center space-x-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Test Parent Email</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Overview Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-slate-500 text-[11px] font-semibold uppercase">Total Complaints</div>
+          <div id="kpi-total" class="text-2xl font-black text-slate-900 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-blue-500 text-[11px] font-semibold uppercase">Open & Under Review</div>
+          <div id="kpi-open" class="text-2xl font-black text-blue-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-amber-500 text-[11px] font-semibold uppercase">In Progress</div>
+          <div id="kpi-progress" class="text-2xl font-black text-amber-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div class="text-emerald-500 text-[11px] font-semibold uppercase">Resolved</div>
+          <div id="kpi-resolved" class="text-2xl font-black text-emerald-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-red-200 shadow-xs bg-red-50/30">
+          <div class="text-red-600 text-[11px] font-semibold uppercase">Emergency</div>
+          <div id="kpi-emergency" class="text-2xl font-black text-red-600 mt-1">0</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-orange-200 shadow-xs bg-orange-50/30">
+          <div class="text-orange-600 text-[11px] font-semibold uppercase">Overdue SLA</div>
+          <div id="kpi-overdue" class="text-2xl font-black text-orange-600 mt-1">0</div>
+        </div>
+      </div>
+
+      <!-- Interactive Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Category Distribution Chart -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Complaints by Category</h3>
+          <div class="h-56 relative flex items-center justify-center">
+            <canvas id="chart-categories"></canvas>
+          </div>
+        </div>
+
+        <!-- Status Distribution Chart -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Status Distribution</h3>
+          <div class="h-56 relative flex items-center justify-center">
+            <canvas id="chart-status"></canvas>
+          </div>
+        </div>
+
+        <!-- Department Resolution Workload -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Department Workload</h3>
+          <div class="h-56 relative flex items-center justify-center">
+            <canvas id="chart-departments"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs: Complaints vs Outbox vs Routing -->
+      <div class="border-b border-slate-200 flex space-x-6">
+        <button onclick="switchAdminTab('complaints')" id="tab-btn-complaints" class="admin-tab-btn pb-3 text-xs font-bold text-blue-600 border-b-2 border-blue-600 transition">
+          <i class="fa-solid fa-list-check mr-1.5"></i>All Campus Complaints
+        </button>
+        <button onclick="switchAdminTab('outbox')" id="tab-btn-outbox" class="admin-tab-btn pb-3 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+          <i class="fa-solid fa-envelope mr-1.5"></i>Email Outbox & Delivery State (<span id="outbox-email-label">anilanji22515@gmail.com</span>)
+        </button>
+        <button onclick="switchAdminTab('routing')" id="tab-btn-routing" class="admin-tab-btn pb-3 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+          <i class="fa-solid fa-diagram-project mr-1.5"></i>Department Routing Rules (16 Categories)
+        </button>
+      </div>
+
+      <!-- Tab Content: Complaints List -->
+      <div id="admin-tab-complaints" class="space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+          <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-slate-700">Filter:</span>
+              <select id="filter-admin-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5">
+                <option value="">All Statuses</option>
+                <option value="SUBMITTED">Submitted</option>
+                <option value="UNDER_REVIEW">Under Review</option>
+                <option value="ASSIGNED">Assigned</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="RESOLVED">Resolved</option>
+                <option value="CLOSED">Closed</option>
+              </select>
+              <select id="filter-admin-priority" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5">
+                <option value="">All Priorities</option>
+                <option value="EMERGENCY">Emergency</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+              </select>
+            </div>
+
+            <div class="relative">
+              <input type="text" id="filter-admin-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search all complaints..." class="text-xs bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 w-60">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="px-5 py-3">ID & Priority</th>
+                  <th class="px-5 py-3">Title & Student</th>
+                  <th class="px-5 py-3">Category</th>
+                  <th class="px-5 py-3">Location</th>
+                  <th class="px-5 py-3">Assigned Department</th>
+                  <th class="px-5 py-3">Status</th>
+                  <th class="px-5 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-complaints-tbody" class="divide-y divide-slate-100">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Outbox & Delivery State -->
+      <div id="admin-tab-outbox" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Automated Notification Audit Outbox</h4>
+              <p class="text-[11px] text-slate-500">Every complaint submission automatically triggers a parent notification record to <strong>anilanji22515@gmail.com</strong>.</p>
+            </div>
+            <button onclick="loadOutbox()" class="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition">
+              <i class="fa-solid fa-rotate-right mr-1"></i>Refresh Logs
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3">Outbox ID</th>
+                  <th class="px-4 py-3">Complaint Ref</th>
+                  <th class="px-4 py-3">Recipient</th>
+                  <th class="px-4 py-3">Subject</th>
+                  <th class="px-4 py-3">Delivery Status</th>
+                  <th class="px-4 py-3">Provider Msg ID</th>
+                  <th class="px-4 py-3">Timestamp</th>
+                  <th class="px-4 py-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="outbox-tbody" class="divide-y divide-slate-100">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Routing Rules -->
+      <div id="admin-tab-routing" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+          <div class="p-4 bg-slate-50 border-b border-slate-200">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">16 Standard Problem Categories & Department Mappings</h4>
+            <p class="text-[11px] text-slate-500">When a student files a complaint under any category, it is automatically routed to the responsible maintenance department queue.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="px-5 py-3">Category ID</th>
+                  <th class="px-5 py-3">Category Name</th>
+                  <th class="px-5 py-3">Scope Description</th>
+                  <th class="px-5 py-3">Default Responsible Department</th>
+                  <th class="px-5 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="routing-tbody" class="divide-y divide-slate-100">
+                <!-- Dynamically Populated from metadata -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. COMPLAINT SUBMISSION MODAL -->
+  <div id="modal-new-complaint" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8">
+      
+      <div class="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-circle-exclamation text-xl"></i>
+          <div>
+            <h3 class="text-base font-bold">Report a Campus Problem</h3>
+            <p class="text-xs text-blue-100">Fill in the details below. Our routing engine will assign the responsible department.</p>
+          </div>
+        </div>
+        <button onclick="closeComplaintModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-complaint" onsubmit="submitComplaint(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+        
+        <!-- Title -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Complaint Title *</label>
+          <input type="text" id="cmp-title" required minlength="5" maxlength="120" placeholder="e.g. Water leakage near classroom 204 ceiling" class="w-full text-xs rounded-xl border border-slate-300 px-3.5 py-2.5 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+          <p class="text-[10px] text-slate-400 mt-0.5">5 to 120 characters describing the issue concisely.</p>
+        </div>
+
+        <!-- Category & Auto-Routing Info -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category *</label>
+            <select id="cmp-category" required onchange="onCategorySelectChange()" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:border-blue-500">
+              <option value="">Select Problem Category</option>
+              <!-- Filled via JS -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Priority Level *</label>
+            <select id="cmp-priority" required onchange="onPriorityChange()" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 outline-none font-semibold">
+              <option value="LOW">Low (Minor issue, 7 days SLA)</option>
+              <option value="MEDIUM" selected>Medium (Standard use issue, 3 days SLA)</option>
+              <option value="HIGH">High (Serious hazard/disruption, 24h SLA)</option>
+              <option value="EMERGENCY">EMERGENCY (Immediate danger, 4h SLA)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Routing Target Pill -->
+        <div id="routing-preview-box" class="hidden p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-arrow-turn-down text-blue-500"></i>
+            <span>Auto-Routing To: <strong id="routing-dept-name">Plumbing and Water</strong></span>
+          </div>
+          <span class="text-[10px] bg-blue-200 text-blue-900 px-2 py-0.5 rounded-full font-bold">Auto-Routed</span>
+        </div>
+
+        <!-- Emergency Advisory Banner if EMERGENCY selected -->
+        <div id="emergency-form-warning" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-300 text-xs text-red-900 space-y-1">
+          <div class="flex items-center space-x-2 font-bold text-red-700">
+            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+            <span>EMERGENCY SELECTION ADVISORY</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Please call Campus Security <strong>(+91-911 / Ext. 911)</strong> immediately if there is danger to life or safety. Submitting this ticket alerts emergency teams, but does not replace emergency calls.
+          </p>
+        </div>
+
+        <!-- Campus Location Picker -->
+        <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 uppercase">Exact Campus Location *</span>
+            <span class="text-[10px] text-slate-400">Campus GPS / Structured Location</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div>
+              <label class="text-[10px] font-semibold text-slate-500">Building *</label>
+              <select id="cmp-building" required class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+                <option value="Main Block">Main Block</option>
+                <option value="Engineering Block">Engineering Block</option>
+                <option value="Central Library">Central Library</option>
+                <option value="Hostel A">Hostel A</option>
+                <option value="Hostel B">Hostel B</option>
+                <option value="Main Canteen">Main Canteen</option>
+                <option value="Sports Complex">Sports Complex</option>
+                <option value="Parking Area">Parking Area</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-semibold text-slate-500">Block / Wing</label>
+              <input type="text" id="cmp-block" placeholder="e.g. Block B" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+            </div>
+            <div>
+              <label class="text-[10px] font-semibold text-slate-500">Floor</label>
+              <input type="text" id="cmp-floor" placeholder="e.g. 2nd Floor" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+            </div>
+            <div>
+              <label class="text-[10px] font-semibold text-slate-500">Room / Area</label>
+              <input type="text" id="cmp-room" placeholder="e.g. Room 204" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-semibold text-slate-500">Nearby Landmark (Optional)</label>
+            <input type="text" id="cmp-landmark" placeholder="e.g. Near Staircase 2 / Opposite Water Dispenser" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+          </div>
+        </div>
+
+        <!-- Duplicate Warning Indicator -->
+        <div id="duplicate-warning-box" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-900 space-y-1">
+          <div class="flex items-center space-x-1.5 font-bold text-amber-800">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Possible Duplicate Complaints Detected in this Location:</span>
+          </div>
+          <ul id="duplicate-list" class="list-disc pl-5 space-y-0.5 text-[11px] text-amber-800"></ul>
+          <p class="text-[10px] text-amber-700 italic">You can still proceed with submission if this is a distinct issue.</p>
+        </div>
+
+        <!-- Detailed Description -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-xs font-bold text-slate-700 uppercase">Detailed Description *</label>
+            <span class="text-[10px] text-slate-400">Explain: What happened? When? Is there danger?</span>
+          </div>
+          <textarea id="cmp-desc" required minlength="15" rows="3" placeholder="Describe the problem clearly..." class="w-full text-xs rounded-xl border border-slate-300 p-3 outline-none focus:border-blue-500"></textarea>
+        </div>
+
+        <!-- Optional Proof Upload -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Attach Photo / Video Proof (Optional)</label>
+          <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-4 text-center cursor-pointer bg-slate-50 transition" onclick="document.getElementById('cmp-file').click()">
+            <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 mb-1"></i>
+            <p class="text-xs font-semibold text-slate-700" id="file-label">Click to upload JPG, PNG, or MP4 (Max 16MB)</p>
+            <input type="file" id="cmp-file" accept="image/*,video/mp4" class="hidden" onchange="handleFileSelected(this)">
+          </div>
+        </div>
+
+        <!-- Anonymous Option & Parent Consent Checkbox -->
+        <div class="space-y-2 pt-2 border-t border-slate-200">
+          <label class="flex items-start space-x-2 text-xs text-slate-700 cursor-pointer">
+            <input type="checkbox" id="cmp-anonymous" class="rounded text-blue-600 mt-0.5">
+            <span>
+              <strong>Report Anonymously:</strong> Hide my name and roll number from department technicians. (Central administrators retain link strictly for abuse prevention).
+            </span>
+          </label>
+
+          <label class="flex items-start space-x-2 text-xs text-slate-700 cursor-pointer bg-blue-50/50 p-2.5 rounded-xl border border-blue-100">
+            <input type="checkbox" id="cmp-consent" required checked class="rounded text-blue-600 mt-0.5">
+            <span>
+              <strong>Notification Consent:</strong> I acknowledge that an automated submission notification will be dispatched to the verified central parent/guardian email address (<code>anilanji22515@gmail.com</code>).
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit & Cancel Buttons -->
+        <div class="pt-4 flex items-center justify-end space-x-3 border-t border-slate-200">
+          <button type="button" onclick="closeComplaintModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">
+            Cancel
+          </button>
+          <button type="submit" id="btn-submit-complaint" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center space-x-2">
+            <span>Confirm & Submit Report</span>
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. COMPLAINT DETAILS & TIMELINE MODAL -->
+  <div id="modal-complaint-detail" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8">
+      
+      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <span id="detail-code-badge" class="font-mono text-xs font-black bg-blue-600 px-3 py-1 rounded-lg">CMP-2026-000001</span>
+          <span id="detail-status-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-800">Status</span>
+        </div>
+        <button onclick="closeDetailModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-6 max-h-[80vh] overflow-y-auto text-xs">
+        
+        <!-- Header Info -->
+        <div>
+          <h3 id="detail-title" class="text-lg font-bold text-slate-900">Title</h3>
+          <p id="detail-desc" class="text-slate-600 mt-1 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200"></p>
+        </div>
+
+        <!-- Meta Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+          <div>
+            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Category</span>
+            <span id="detail-category" class="font-bold text-slate-800">Category</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Priority</span>
+            <span id="detail-priority" class="font-bold">Priority</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Assigned Dept</span>
+            <span id="detail-dept" class="font-bold text-slate-800">Department</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Reporter</span>
+            <span id="detail-student" class="font-bold text-slate-800">Student</span>
+          </div>
+        </div>
+
+        <!-- Campus Location Details -->
+        <div>
+          <span class="text-[10px] text-slate-400 font-semibold block uppercase mb-1">Campus Location</span>
+          <div class="p-2.5 rounded-xl bg-slate-100/80 font-medium text-slate-700 flex items-center space-x-2">
+            <i class="fa-solid fa-location-dot text-red-500"></i>
+            <span id="detail-location">Location details</span>
+          </div>
+        </div>
+
+        <!-- Visual Chronological Status Timeline -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3 flex items-center justify-between">
+            <span>Status Timeline & Lifecycle Audit</span>
+            <span class="text-[10px] text-slate-400 font-normal">UTC Campus Log</span>
+          </h4>
+          <div id="timeline-container" class="space-y-3 relative pl-6 border-l-2 border-blue-200 ml-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Resolution Details (if marked resolved) -->
+        <div id="detail-resolution-box" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+          <div class="flex items-center space-x-2 text-emerald-800 font-bold">
+            <i class="fa-solid fa-circle-check text-base"></i>
+            <span>Department Resolution Proof & Summary</span>
+          </div>
+          <p id="detail-resolution-summary" class="text-xs text-emerald-900 leading-relaxed"></p>
+          <p id="detail-resolution-work" class="text-[11px] text-emerald-700 italic"></p>
+          <div class="text-[10px] text-emerald-600 pt-1" id="detail-resolution-meta"></div>
+        </div>
+
+        <!-- Post-Resolution Student Feedback Form (if student & resolved/closed) -->
+        <div id="detail-feedback-section" class="hidden border border-slate-200 p-4 rounded-2xl bg-blue-50/30 space-y-3">
+          <h4 class="text-xs font-bold text-slate-900 flex items-center space-x-1.5">
+            <i class="fa-solid fa-star text-amber-500"></i>
+            <span>Student Resolution Feedback</span>
+          </h4>
+          
+          <div id="feedback-form-content">
+            <p class="text-xs text-slate-600 mb-2">Has your complaint been satisfactorily resolved by the department?</p>
+            <div class="flex items-center space-x-4 mb-3">
+              <label class="flex items-center space-x-1.5 cursor-pointer font-semibold text-emerald-700">
+                <input type="radio" name="fb_fixed" value="1" checked class="text-emerald-600">
+                <span>Yes, problem fixed</span>
+              </label>
+              <label class="flex items-center space-x-1.5 cursor-pointer font-semibold text-red-600">
+                <input type="radio" name="fb_fixed" value="0" class="text-red-600">
+                <span>No, problem remains</span>
+              </label>
+            </div>
+
+            <div class="mb-3">
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Rating (1 to 5 Stars):</label>
+              <div class="flex space-x-2 text-lg text-slate-300 cursor-pointer" id="star-rating-box">
+                <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(1)"></i>
+                <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(2)"></i>
+                <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(3)"></i>
+                <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(4)"></i>
+                <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(5)"></i>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <textarea id="fb-comment" rows="2" placeholder="Optional comments on resolution quality..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5 outline-none"></textarea>
+            </div>
+
+            <button onclick="submitStudentFeedback()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+              Submit Feedback
+            </button>
+          </div>
+
+          <div id="feedback-display-content" class="hidden text-xs space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-800">Student Rating:</span>
+              <span id="fb-stars-display" class="text-amber-500 font-bold">★★★★★</span>
+            </div>
+            <p id="fb-comment-display" class="text-slate-600 italic bg-white p-2.5 rounded-xl border border-slate-200"></p>
+          </div>
+        </div>
+
+        <!-- Reopen Button if student or admin -->
+        <div id="detail-reopen-box" class="hidden pt-2 flex justify-end">
+          <button onclick="promptReopen()" class="px-3.5 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-xl font-bold text-xs border border-rose-200 transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Request to Reopen Complaint</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeDetailModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-xs transition">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. UPDATE STATUS & WORK NOTE MODAL (For Staff / Admin) -->
+  <div id="modal-update-status" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+        <h3 class="text-sm font-bold">Update Complaint Workflow Status</h3>
+        <button onclick="closeStatusModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-update-status" onsubmit="submitStatusUpdate(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="status-complaint-id">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">New Workflow Status *</label>
+          <select id="status-select" required class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-semibold">
+            <option value="UNDER_REVIEW">UNDER_REVIEW - Admin/Department checking</option>
+            <option value="ASSIGNED">ASSIGNED - Assigned to technician</option>
+            <option value="IN_PROGRESS">IN_PROGRESS - Work has started</option>
+            <option value="ON_HOLD">ON_HOLD - Temporarily blocked (parts/access)</option>
+            <option value="RESOLVED">RESOLVED - Fix complete (requires summary)</option>
+            <option value="REJECTED">REJECTED - Invalid / outside scope</option>
+            <option value="CLOSED">CLOSED - Verified complete</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Public Update Message *</label>
+          <input type="text" id="status-public-msg" required placeholder="Visible to student (e.g. Technician dispatched with replacement part)" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+          <p class="text-[10px] text-slate-400 mt-0.5">This message will appear in the student's status timeline.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Internal Note (Staff & Admin Only)</label>
+          <textarea id="status-internal-note" rows="2" placeholder="Private internal technical notes - NEVER shown to students..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5"></textarea>
+        </div>
+
+        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
+          <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs">Apply Status</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. ADD RESOLUTION PROOF MODAL (For Staff) -->
+  <div id="modal-resolution" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-emerald-600 text-white flex justify-between items-center">
+        <h3 class="text-sm font-bold flex items-center space-x-2">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Record Problem Resolution</span>
+        </h3>
+        <button onclick="closeResolutionModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-resolution" onsubmit="submitResolution(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="res-complaint-id">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Resolution Summary *</label>
+          <input type="text" id="res-summary" required placeholder="e.g. Replaced defective valve and tested pipeline pressure" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Detailed Work Performed</label>
+          <textarea id="res-work" rows="3" placeholder="Explain technical steps taken, parts replaced, and inspection results..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5"></textarea>
+        </div>
+
+        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
+          <button type="button" onclick="closeResolutionModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs">Complete & Mark Resolved</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. REASSIGN MODAL (For Dept Head & Admin) -->
+  <div id="modal-reassign" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-indigo-600 text-white flex justify-between items-center">
+        <h3 class="text-sm font-bold">Assign Staff or Reassign Department</h3>
+        <button onclick="closeReassignModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-reassign" onsubmit="submitReassign(event)" class="p-6 space-y-4 text-xs">
+        <input type="hidden" id="reassign-complaint-id">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Responsible Department</label>
+          <select id="reassign-dept" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-medium"></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Assign Staff Member</label>
+          <select id="reassign-staff" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-medium">
+            <option value="">-- Unassigned Staff Queue --</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Assignment Note</label>
+          <input type="text" id="reassign-note" placeholder="Reason or instructions for assignee" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+        </div>
+
+        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
+          <button type="button" onclick="closeReassignModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-xs">Save Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. AUTH / SIGN IN MODAL -->
+  <div id="modal-auth" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      
+      <div class="p-5 bg-gradient-to-r from-blue-700 to-indigo-700 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-base font-bold">CampusCare Portal</h3>
+          <p class="text-xs text-blue-100">Sign in to your account</p>
+        </div>
+        <button onclick="closeAuthModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <!-- Tab Selector: Login vs Register -->
+        <div class="flex border-b border-slate-200 text-xs font-bold">
+          <button onclick="switchAuthTab('login')" id="btn-tab-login" class="pb-2 px-4 text-blue-600 border-b-2 border-blue-600">Sign In</button>
+          <button onclick="switchAuthTab('register')" id="btn-tab-register" class="pb-2 px-4 text-slate-400 hover:text-slate-600">Student Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">College ID or Email</label>
+            <input type="text" id="login-identifier" required placeholder="e.g. DEMO-CSE-001 or rahul.demo@example.com" class="w-full rounded-xl border border-slate-300 p-2.5">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Password</label>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-300 p-2.5">
+          </div>
+          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+            Sign In to Dashboard
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+            <input type="text" id="reg-name" required placeholder="e.g. Anita Sharma" class="w-full rounded-xl border border-slate-300 p-2">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">College Roll ID *</label>
+              <input type="text" id="reg-college-id" required placeholder="e.g. 24CSE089" class="w-full rounded-xl border border-slate-300 p-2">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Year of Study *</label>
+              <select id="reg-year" class="w-full rounded-xl border border-slate-300 p-2">
+                <option value="1">Year 1</option>
+                <option value="2">Year 2</option>
+                <option value="3">Year 3</option>
+                <option value="4">Year 4</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">College Email Address *</label>
+            <input type="email" id="reg-email" required placeholder="anita@college.edu" class="w-full rounded-xl border border-slate-300 p-2">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Password *</label>
+            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-300 p-2">
+          </div>
+          <label class="flex items-start space-x-2 text-[11px] text-slate-600">
+            <input type="checkbox" id="reg-consent" required checked class="mt-0.5">
+            <span>I consent to CampusCare notification policy & parent alerts.</span>
+          </label>
+          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+            Create Student Account
+          </button>
+        </form>
+
+        <!-- Fast Demo Buttons -->
+        <div class="pt-3 border-t border-slate-200">
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">Fast Demo 1-Click Access</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="demoLogin('student')" class="p-2 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-xs font-semibold text-slate-700 transition">
+              👨‍🎓 Student Demo
+            </button>
+            <button type="button" onclick="demoLogin('staff')" class="p-2 rounded-xl bg-slate-100 hover:bg-amber-50 hover:text-amber-600 text-xs font-semibold text-slate-700 transition">
+              🔧 Staff Demo
+            </button>
+            <button type="button" onclick="demoLogin('department_head')" class="p-2 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-xs font-semibold text-slate-700 transition">
+              👔 Dept Head Demo
+            </button>
+            <button type="button" onclick="demoLogin('admin')" class="p-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-600 text-xs font-semibold text-slate-700 transition">
+              🛡️ Admin Demo
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 7. TEST PARENT EMAIL MODAL (For Administrator) -->
+  <div id="modal-test-email" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+        <h3 class="text-sm font-bold flex items-center space-x-2">
+          <i class="fa-solid fa-paper-plane text-blue-400"></i>
+          <span>Dispatch Diagnostic Parent Notification</span>
+        </h3>
+        <button onclick="closeTestEmailModal()" class="text-white/80 hover:text-white p-1 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <p class="text-slate-600">
+          This triggers a diagnostic notification dispatch from the backend to verify outbox recording and delivery telemetry.
+        </p>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase mb-1">Target Recipient Email</label>
+          <input type="email" id="test-email-input" value="anilanji22515@gmail.com" class="w-full text-xs rounded-xl border border-slate-300 p-2.5 bg-slate-50 font-mono">
+        </div>
+
+        <div id="test-email-status-box" class="hidden p-3 rounded-xl text-xs space-y-1"></div>
+
+        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
+          <button type="button" onclick="closeTestEmailModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Close</button>
+          <button type="button" onclick="sendDiagnosticEmail()" id="btn-send-test-email" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+            Dispatch Email Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 max-w-sm bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs border border-slate-700">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="toast-msg" class="font-medium">Notification message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
