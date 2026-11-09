@@ -425,6 +425,9 @@ function renderAdminComplaints(items) {
         <span class="px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold badge-status-${c.status}">${c.status.replace('_', ' ')}</span>
       </td>
       <td class="px-5 py-3 text-right space-x-1">
+        <button onclick="openLinkDuplicateModal(${c.id}, '${c.complaint_code}')" title="Link Duplicate to Master Incident" class="p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition">
+          <i class="fa-solid fa-link"></i>
+        </button>
         <button onclick="openReassignModal(${c.id}, '${c.assigned_department_id}', '${c.assigned_staff_id || ''}')" title="Reassign Department" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition">
           <i class="fa-solid fa-arrows-split-up-and-left"></i>
         </button>
@@ -466,6 +469,36 @@ async function viewComplaintDetail(id) {
     document.getElementById('detail-dept').textContent = activeComplaint.department_name || 'Central Administration';
     document.getElementById('detail-student').textContent = activeComplaint.is_anonymous ? 'Anonymous Student' : (activeComplaint.student_name || 'Student');
     document.getElementById('detail-location').textContent = activeComplaint.location_description || `${activeComplaint.building}, Floor: ${activeComplaint.floor}, Room: ${activeComplaint.room}`;
+
+    // Master incident link (if duplicate)
+    const dupBanner = document.getElementById('detail-duplicate-banner');
+    if (activeComplaint.parent_complaint_id && activeComplaint.parent_complaint_code) {
+      dupBanner.classList.remove('hidden');
+      document.getElementById('detail-master-code').textContent = activeComplaint.parent_complaint_code;
+      document.getElementById('detail-master-title').textContent = activeComplaint.parent_complaint_title || '';
+    } else {
+      dupBanner.classList.add('hidden');
+    }
+
+    // Attachments
+    const attBox = document.getElementById('detail-attachments-box');
+    const attList = document.getElementById('detail-attachments-list');
+    const attachments = data.attachments || [];
+    if (attachments.length > 0) {
+      attBox.classList.remove('hidden');
+      attList.innerHTML = attachments.map(a => {
+        const isImg = a.mime_type && a.mime_type.startsWith('image/');
+        return `
+          <a href="${a.url}" target="_blank" class="block p-2 rounded-xl border border-slate-200 bg-white hover:border-blue-500 shadow-xs transition">
+            ${isImg ? `<img src="${a.url}" class="w-full h-20 object-cover rounded-lg mb-1">` : `<div class="h-20 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 mb-1"><i class="fa-solid fa-file-video text-2xl"></i></div>`}
+            <div class="text-[10px] font-bold text-slate-700 truncate">${escapeHtml(a.file_name)}</div>
+            <div class="text-[9px] text-slate-400">${(a.file_size / 1024).toFixed(1)} KB</div>
+          </a>
+        `;
+      }).join('');
+    } else {
+      attBox.classList.add('hidden');
+    }
 
     // Render Timeline
     const timelineContainer = document.getElementById('timeline-container');
@@ -633,6 +666,21 @@ async function submitComplaint(e) {
     btn.innerHTML = `<span>Confirm & Submit Report</span> <i class="fa-solid fa-paper-plane text-xs"></i>`;
 
     if (res.ok) {
+      // Check if user attached a proof file
+      const fileInput = document.getElementById('cmp-file');
+      if (fileInput && fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        try {
+          await fetch(`/api/complaints/${data.complaint_id}/attachments`, {
+            method: 'POST',
+            body: formData
+          });
+        } catch (uploadErr) {
+          console.warn("Attachment upload warning:", uploadErr);
+        }
+      }
+
       closeComplaintModal();
       showToast(`Complaint ${data.complaint_code} submitted! Parent notification dispatched to anilanji22515@gmail.com`, 'success');
       await loadComplaints();
@@ -1166,4 +1214,175 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// ----------------- CAMPUS MAP MODAL -----------------
+
+function openCampusMapModal() {
+  document.getElementById('modal-campus-map').classList.remove('hidden');
+}
+
+function closeCampusMapModal() {
+  document.getElementById('modal-campus-map').classList.add('hidden');
+}
+
+function selectMapBuilding(building, block, floor, room) {
+  document.getElementById('cmp-building').value = building;
+  if (block) document.getElementById('cmp-block').value = block;
+  if (floor) document.getElementById('cmp-floor').value = floor;
+  if (room) document.getElementById('cmp-room').value = room;
+  closeCampusMapModal();
+  showToast(`Pinned location: ${building}`, 'success');
+}
+
+// ----------------- LINK DUPLICATE MODAL -----------------
+
+function openLinkDuplicateModal(id, code) {
+  document.getElementById('link-target-id').value = id;
+  const masterSelect = document.getElementById('link-master-select');
+  masterSelect.innerHTML = complaintsList
+    .filter(c => c.id != id)
+    .map(c => `<option value="${c.id}">${c.complaint_code} - ${escapeHtml(c.title)} (${c.status})</option>`)
+    .join('');
+  document.getElementById('link-reason').value = '';
+  document.getElementById('modal-link-duplicate').classList.remove('hidden');
+}
+
+function closeLinkDuplicateModal() {
+  document.getElementById('modal-link-duplicate').classList.add('hidden');
+}
+
+async function submitLinkDuplicate(e) {
+  e.preventDefault();
+  const id = document.getElementById('link-target-id').value;
+  const master_complaint_id = document.getElementById('link-master-select').value;
+  const reason = document.getElementById('link-reason').value;
+
+  try {
+    const res = await fetch(`/api/complaints/${id}/merge-duplicate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ master_complaint_id, reason })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(data.message, 'success');
+      closeLinkDuplicateModal();
+      await loadComplaints();
+    } else {
+      showToast(data.error || 'Failed to link duplicate', 'error');
+    }
+  } catch (err) {
+    showToast('Failed to link duplicate complaint', 'error');
+  }
+}
+
+// ----------------- GUIDED DEMO TOUR (SECTION 39) -----------------
+
+let currentTourStep = 0;
+const tourSteps = [
+  {
+    title: "1. Student Complaint Submission",
+    body: `
+      <p>A student logs in, opens <strong>Report a Campus Problem</strong>, selects an infrastructure category (e.g. <em>Water and Sanitation</em>), pins a location (e.g. <em>Main Block Room 204</em>), and submits photo evidence with priority.</p>
+      <p class="text-blue-700 font-semibold">The routing engine automatically maps this ticket to Plumbing Maintenance and generates a reference code (CMP-YYYY-XXXXXX).</p>
+    `,
+    actionLabel: "Switch to Student (Rahul) & Open Form",
+    action: async () => {
+      await demoLogin('student');
+      openComplaintModal();
+    }
+  },
+  {
+    title: "2. Parent Notification Outbox Audit",
+    body: `
+      <p>As mandated by the project specification, upon database commit the backend automatically queues an email notification to <strong>anilanji22515@gmail.com</strong>.</p>
+      <p class="text-emerald-700 font-semibold">The administrator can inspect the live outbox table, review delivery states, and trigger diagnostic test dispatches.</p>
+    `,
+    actionLabel: "Switch to Admin & View Outbox Log",
+    action: async () => {
+      await demoLogin('admin');
+      switchAdminTab('outbox');
+    }
+  },
+  {
+    title: "3. Department Intake & Workflow Transition",
+    body: `
+      <p>Department staff and technicians receive the assigned complaint in their queue. Emergency and high-priority tickets are highlighted at the top.</p>
+      <p class="text-amber-700 font-semibold">Staff update status from SUBMITTED &rarr; IN_PROGRESS, recording public progress notes while private technical notes remain protected.</p>
+    `,
+    actionLabel: "Switch to Staff & View Plumbing Queue",
+    action: async () => {
+      await demoLogin('staff');
+    }
+  },
+  {
+    title: "4. Resolution Proof & Student Feedback",
+    body: `
+      <p>When repairs are complete, the technician adds resolution details and marks the complaint <strong>RESOLVED</strong>.</p>
+      <p class="text-purple-700 font-semibold">The student reviews the resolution in their timeline, submits a 1-to-5 star rating with feedback, or requests a reopen if the problem remains.</p>
+    `,
+    actionLabel: "View Sample Resolved Complaint (CMP-2026-000001)",
+    action: async () => {
+      await demoLogin('student');
+      viewComplaintDetail(1);
+    }
+  },
+  {
+    title: "5. Executive Analytics & Telemetry",
+    body: `
+      <p>Central administrators monitor live KPI counts (open, in progress, resolved, overdue SLA, emergency alerts), category distribution charts, and department workload performance.</p>
+      <p class="text-slate-800 font-semibold">Data can be exported instantly to CSV for college reporting.</p>
+    `,
+    actionLabel: "Switch to Admin & View Analytics",
+    action: async () => {
+      await demoLogin('admin');
+      switchAdminTab('complaints');
+    }
+  }
+];
+
+function startGuidedTour() {
+  currentTourStep = 0;
+  renderTourStep();
+  document.getElementById('modal-guided-tour').classList.remove('hidden');
+}
+
+function closeGuidedTour() {
+  document.getElementById('modal-guided-tour').classList.add('hidden');
+}
+
+function renderTourStep() {
+  const step = tourSteps[currentTourStep];
+  document.getElementById('tour-step-counter').textContent = `Step ${currentTourStep + 1} of ${tourSteps.length}`;
+  document.getElementById('tour-step-title').textContent = step.title;
+  document.getElementById('tour-step-body').innerHTML = step.body;
+  document.getElementById('tour-action-label').textContent = step.actionLabel;
+  document.getElementById('btn-tour-prev').disabled = (currentTourStep === 0);
+  document.getElementById('btn-tour-next').textContent = (currentTourStep === tourSteps.length - 1) ? 'Finish Tour' : 'Next Step →';
+}
+
+function nextTourStep() {
+  if (currentTourStep < tourSteps.length - 1) {
+    currentTourStep++;
+    renderTourStep();
+  } else {
+    closeGuidedTour();
+    showToast('Guided Tour completed!', 'success');
+  }
+}
+
+function prevTourStep() {
+  if (currentTourStep > 0) {
+    currentTourStep--;
+    renderTourStep();
+  }
+}
+
+async function executeTourAction() {
+  const step = tourSteps[currentTourStep];
+  if (step && step.action) {
+    closeGuidedTour();
+    await step.action();
+  }
 }

@@ -453,6 +453,17 @@ def get_complaint_detail(complaint_id):
         email_rows = conn.execute("SELECT * FROM email_outbox WHERE complaint_id = ? ORDER BY created_at DESC", (complaint_id,)).fetchall()
         email_logs = [dict(e) for e in email_rows]
         
+    # Attachments
+    att_rows = conn.execute("SELECT id, file_name, mime_type, file_size, uploaded_at FROM complaint_attachments WHERE complaint_id = ?", (complaint_id,)).fetchall()
+    attachments = [{'id': r['id'], 'file_name': r['file_name'], 'mime_type': r['mime_type'], 'file_size': r['file_size'], 'url': f"/api/attachments/{r['id']}", 'uploaded_at': r['uploaded_at']} for r in att_rows]
+
+    # Check Master complaint if linked
+    if complaint_data.get('parent_complaint_id'):
+        master_row = conn.execute("SELECT complaint_code, title FROM complaints WHERE id = ?", (complaint_data['parent_complaint_id'],)).fetchone()
+        if master_row:
+            complaint_data['parent_complaint_code'] = master_row['complaint_code']
+            complaint_data['parent_complaint_title'] = master_row['title']
+
     conn.close()
     
     return jsonify({
@@ -460,10 +471,102 @@ def get_complaint_detail(complaint_id):
         'timeline': timeline,
         'resolution': resolution,
         'feedback': feedback,
+        'attachments': attachments,
         'email_logs': email_logs
     }), 200
 
-# ----------------- STATUS & WORKFLOW UPDATES -----------------
+from werkzeug.utils import secure_filename
+import mimetypes
+
+# Helper for allowed files
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in Config.ALLOWED_EXTENSIONS
+
+# Serve / download attachments securely
+@app.route('/api/attachments/<int:attachment_id>', methods=['GET'])
+def get_attachment(attachment_id):
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+    conn = get_db()
+    att = conn.execute("SELECT * FROM complaint_attachments WHERE id = ?", (attachment_id,)).fetchone()
+    conn.close()
+    if not att or not os.path.exists(att['storage_path']):
+        return jsonify({'error': 'Attachment not found'}), 404
+    return send_file(att['storage_path'], mimetype=att['mime_type'], as_attachment=False, download_name=att['file_name'])
+
+# Upload attachment endpoint
+@app.route('/api/complaints/<int:complaint_id>/attachments', methods=['POST'])
+def upload_attachment(complaint_id):
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part in request'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if not allowed_file(file.filename):
+        return jsonify({'error': f'File type not allowed. Allowed: {Config.ALLOWED_EXTENSIONS}'}), 400
+
+    filename = secure_filename(file.filename)
+    unique_name = f"cmp_{complaint_id}_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{filename}"
+    save_path = os.path.join(Config.UPLOAD_FOLDER, unique_name)
+    file.save(save_path)
+    file_size = os.path.getsize(save_path)
+    mime_type, _ = mimetypes.guess_type(save_path)
+    mime_type = mime_type or 'application/octet-stream'
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO complaint_attachments (complaint_id, uploaded_by, file_name, storage_path, mime_type, file_size)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (complaint_id, user['id'], filename, save_path, mime_type, file_size))
+    att_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'attachment_id': att_id, 'file_name': filename, 'url': f'/api/attachments/{att_id}'}), 201
+
+# Link duplicate complaint to master complaint
+@app.route('/api/complaints/<int:complaint_id>/merge-duplicate', methods=['POST'])
+def merge_duplicate_complaint(complaint_id):
+    user = get_current_user()
+    if not user or user['role'] not in ('admin', 'system_admin', 'department_head'):
+        return jsonify({'error': 'Unauthorized to link duplicates'}), 403
+    data = request.get_json() or {}
+    master_complaint_id = data.get('master_complaint_id')
+    reason = data.get('reason', 'Linked as duplicate complaint to master incident.')
+
+    if not master_complaint_id or int(master_complaint_id) == complaint_id:
+        return jsonify({'error': 'A valid different master complaint ID is required'}), 400
+
+    conn = get_db()
+    master = conn.execute("SELECT id, complaint_code FROM complaints WHERE id = ?", (master_complaint_id,)).fetchone()
+    target = conn.execute("SELECT id, complaint_code, student_id FROM complaints WHERE id = ?", (complaint_id,)).fetchone()
+    if not master or not target:
+        conn.close()
+        return jsonify({'error': 'Target or Master complaint not found'}), 404
+
+    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    cursor = conn.cursor()
+    cursor.execute("UPDATE complaints SET parent_complaint_id = ?, updated_at = ? WHERE id = ?", (master_complaint_id, now_str, complaint_id))
+    cursor.execute("""
+        INSERT INTO complaint_status_history (complaint_id, old_status, new_status, changed_by, public_message, internal_note, changed_at)
+        VALUES (?, 'UNDER_REVIEW', 'UNDER_REVIEW', ?, 'Complaint linked to master ticket ' || ?, ?, ?)
+    """, (complaint_id, user['id'], master['complaint_code'], f"Duplicate linked: {reason}", now_str))
+
+    cursor.execute("""
+        INSERT INTO notifications (user_id, complaint_id, event_type, title, message)
+        VALUES (?, ?, 'DUPLICATE_LINKED', 'Complaint Linked to Master Incident', 'Your complaint has been linked to master ticket ' || ? || ' for coordinated resolution.')
+    """, (target['student_id'], complaint_id, master['complaint_code']))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'message': f'Linked complaint to master {master["complaint_code"]}'}), 200
+
 
 @app.route('/api/complaints/<int:complaint_id>/status', methods=['PATCH'])
 def update_complaint_status(complaint_id):
