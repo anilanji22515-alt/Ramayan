@@ -31,10 +31,12 @@ Complaints are automatically routed to the responsible department queue upon sub
 16. **Other** &rarr; Central Campus Administration (`D001`)
 
 ### 2. Mandatory Parent/Guardian Email Notification
-* **Configured Central Recipient**: `anilanji22515@gmail.com` (configured securely on backend via `PARENT_NOTIFICATION_EMAIL`).
-* **Transactional Reliability**: Handled via an asynchronous database outbox (`email_outbox` table). A complaint is never blocked or cancelled if an email delivery provider experiences temporary failure.
-* **Privacy-Preserving**: Dispatches complaint code, category, location, priority, and submission summary without leaking authentication tokens, passwords, or confidential medical details.
+* **Configured Central Recipient**: `anilanji22515@gmail.com` (configured securely on backend via `PARENT_NOTIFICATION_EMAIL` or directly in the Admin Email Configuration GUI).
+* **Live vs. Simulated Dispatch**:
+  * **Live Delivery**: Turn on "Enable Live SMTP Dispatch" in the Admin Dashboard, enter your SMTP user and app password (e.g. Gmail 16-character App Password), and all complaint submissions immediately dispatch real emails across the internet to `anilanji22515@gmail.com`.
+  * **Simulation Mode**: If SMTP credentials are not yet configured, submissions are safely recorded in the `email_outbox` audit table with status `SIMULATED` and an audit note.
 * **Diagnostic Audit Console**: Administrators can inspect outbox delivery statuses (`SENT`, `SIMULATED`, `FAILED`), trigger retries, or dispatch test diagnostic messages directly from the admin dashboard.
+* **Privacy-Preserving**: Dispatches complaint reference code, category, location, priority, and submission summary without leaking authentication tokens, passwords, or confidential medical details.
 
 ### 3. Role-Based Access Control (RBAC) & Multi-Role Dashboards
 * **👨‍🎓 Student**:

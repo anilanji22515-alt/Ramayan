@@ -10,19 +10,70 @@ logger = logging.getLogger('campuscare.email')
 
 class EmailService:
     @staticmethod
-    def send_notification(recipient, subject, body_text, body_html=None):
+    def get_smtp_settings():
+        """
+        Retrieves current SMTP and recipient settings, merging environment
+        defaults with any dynamic overrides stored in system_settings.
+        """
+        settings = {
+            'enabled': Config.EMAIL_ENABLED,
+            'host': Config.SMTP_HOST,
+            'port': Config.SMTP_PORT,
+            'user': Config.SMTP_USER,
+            'password': Config.SMTP_PASSWORD,
+            'from_email': Config.EMAIL_FROM,
+            'recipient': Config.PARENT_NOTIFICATION_EMAIL
+        }
+        
+        try:
+            from database import get_db
+            conn = get_db()
+            rows = conn.execute("SELECT setting_key, setting_value FROM system_settings").fetchall()
+            conn.close()
+            for r in rows:
+                k = r['setting_key']
+                v = r['setting_value']
+                if k == 'EMAIL_ENABLED':
+                    settings['enabled'] = v.lower() in ('true', '1', 'yes')
+                elif k == 'SMTP_HOST':
+                    settings['host'] = v
+                elif k == 'SMTP_PORT':
+                    settings['port'] = int(v) if v.isdigit() else 587
+                elif k == 'SMTP_USER':
+                    settings['user'] = v
+                elif k == 'SMTP_PASSWORD':
+                    settings['password'] = v
+                elif k == 'EMAIL_FROM':
+                    settings['from_email'] = v
+                elif k == 'PARENT_NOTIFICATION_EMAIL':
+                    settings['recipient'] = v
+        except Exception as e:
+            logger.debug(f"Could not read database system_settings: {e}")
+            
+        return settings
+
+    @staticmethod
+    def send_notification(recipient, subject, body_text, body_html=None, override_settings=None):
         """
         Sends an email using configured SMTP, or falls back to robust simulation.
-        Returns a dict with status: 'SENT' | 'SIMULATED' | 'FAILED', message_id, error
+        Returns a dict with status: 'SENT' | 'SIMULATED' | 'FAILED', message_id, error, note.
         """
+        cfg = override_settings or EmailService.get_smtp_settings()
         message_id = f"MSG-{uuid.uuid4().hex[:12].upper()}"
         
-        # Check if actual SMTP is configured and enabled
-        if Config.EMAIL_ENABLED and Config.SMTP_USER and Config.SMTP_PASSWORD:
+        # Check if actual SMTP credentials are provided and email sending is enabled
+        smtp_user = cfg.get('user', '').strip()
+        smtp_pass = cfg.get('password', '').strip()
+        smtp_host = cfg.get('host', 'smtp.gmail.com').strip()
+        smtp_port = int(cfg.get('port', 587))
+        from_addr = cfg.get('from_email', '').strip() or smtp_user or 'campuscare-noreply@college.edu'
+        is_enabled = cfg.get('enabled', False)
+        
+        if is_enabled and smtp_user and smtp_pass:
             try:
                 msg = MIMEMultipart('alternative')
                 msg['Subject'] = subject
-                msg['From'] = Config.EMAIL_FROM
+                msg['From'] = f"CampusCare Problem Portal <{from_addr}>"
                 msg['To'] = recipient
                 msg['Message-ID'] = f"<{message_id}@campuscare.edu>"
                 msg['Date'] = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
@@ -33,35 +84,46 @@ class EmailService:
                     part2 = MIMEText(body_html, 'html')
                     msg.attach(part2)
                 
-                with smtplib.SMTP(Config.SMTP_HOST, Config.SMTP_PORT, timeout=10) as server:
-                    server.starttls()
-                    server.login(Config.SMTP_USER, Config.SMTP_PASSWORD)
-                    server.sendmail(Config.EMAIL_FROM, [recipient], msg.as_string())
+                # Support direct SSL (port 465) or STARTTLS (port 587 / 25)
+                if smtp_port == 465:
+                    with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=12) as server:
+                        server.login(smtp_user, smtp_pass)
+                        server.sendmail(from_addr, [recipient], msg.as_string())
+                else:
+                    with smtplib.SMTP(smtp_host, smtp_port, timeout=12) as server:
+                        server.ehlo()
+                        server.starttls()
+                        server.ehlo()
+                        server.login(smtp_user, smtp_pass)
+                        server.sendmail(from_addr, [recipient], msg.as_string())
                 
-                logger.info(f"Email sent successfully to {recipient} [{message_id}]")
+                logger.info(f"Live email delivered successfully to {recipient} [{message_id}] via {smtp_host}:{smtp_port}")
                 return {
                     'status': 'SENT',
                     'message_id': message_id,
                     'error': None,
-                    'is_simulated': False
+                    'is_simulated': False,
+                    'note': f"Live email delivered to {recipient} via {smtp_host}"
                 }
             except Exception as e:
-                logger.error(f"Failed to send real email to {recipient}: {str(e)}")
+                err_msg = str(e)
+                logger.error(f"Live SMTP delivery failed for {recipient}: {err_msg}")
                 return {
                     'status': 'FAILED',
                     'message_id': message_id,
-                    'error': str(e),
-                    'is_simulated': False
+                    'error': err_msg,
+                    'is_simulated': False,
+                    'note': f"SMTP Error: {err_msg}. Please check SMTP credentials in Admin > Email Configuration."
                 }
         else:
             # Fallback to simulated delivery for prototype demo
-            logger.info(f"[SIMULATION] Email prepared for {recipient}: '{subject}' [{message_id}]")
+            logger.info(f"[SIMULATION] Email recorded in outbox for {recipient}: '{subject}' [{message_id}]")
             return {
                 'status': 'SIMULATED',
                 'message_id': message_id,
                 'error': None,
                 'is_simulated': True,
-                'note': 'Email simulation active - SMTP credentials not configured. Recorded in delivery outbox.'
+                'note': f"Delivery recorded in outbox for {recipient}. (To dispatch live internet emails, enter your SMTP App Password in the Admin Email Configuration panel or set SMTP_USER and SMTP_PASSWORD in .env)."
             }
 
     @staticmethod
@@ -94,29 +156,24 @@ This is an automated notification. Please do not reply to this email.
 <head>
   <meta charset="utf-8">
   <style>
-    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 20px; }}
-    .card {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }}
-    .header {{ background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; padding: 24px; text-align: left; }}
-    .header h1 {{ margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em; }}
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #fff7ed; color: #1e293b; margin: 0; padding: 20px; }}
+    .card {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #fed7aa; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.08); }}
+    .header {{ background: linear-gradient(135deg, #ea580c, #f97316); color: #ffffff; padding: 24px; text-align: left; }}
+    .header h1 {{ margin: 0; font-size: 20px; font-weight: 700; }}
     .content {{ padding: 24px; }}
-    .badge {{ display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-transform: uppercase; }}
-    .badge-emergency {{ background-color: #fee2e2; color: #991b1b; }}
-    .badge-high {{ background-color: #ffedd5; color: #9a3412; }}
-    .badge-medium {{ background-color: #fef3c7; color: #92400e; }}
-    .badge-low {{ background-color: #e0f2fe; color: #075985; }}
     .info-table {{ width: 100%; border-collapse: collapse; margin-top: 16px; margin-bottom: 20px; }}
-    .info-table td {{ padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }}
-    .info-table td.label {{ color: #64748b; font-weight: 500; width: 35%; }}
-    .info-table td.value {{ color: #0f172a; font-weight: 600; }}
-    .summary-box {{ background: #f8fafc; border-left: 4px solid #3b82f6; padding: 14px; border-radius: 4px; font-size: 14px; color: #334155; margin-bottom: 20px; }}
-    .footer {{ background: #f8fafc; padding: 16px 24px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center; }}
+    .info-table td {{ padding: 10px 12px; border-bottom: 1px solid #ffedd5; font-size: 14px; }}
+    .info-table td.label {{ color: #78716c; font-weight: 500; width: 35%; }}
+    .info-table td.value {{ color: #0c0a09; font-weight: 600; }}
+    .summary-box {{ background: #fff7ed; border-left: 4px solid #f97316; padding: 14px; border-radius: 4px; font-size: 14px; color: #431407; margin-bottom: 20px; }}
+    .footer {{ background: #fffaf5; padding: 16px 24px; border-top: 1px solid #fed7aa; font-size: 12px; color: #78716c; text-align: center; }}
   </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
-      <h1>CampusCare Portal Notification</h1>
-      <p style="margin: 4px 0 0 0; opacity: 0.9; font-size: 14px;">Campus Problem Reporting & Management System</p>
+      <h1>CampusCare Problem Notification</h1>
+      <p style="margin: 4px 0 0 0; opacity: 0.95; font-size: 13px;">Automated Campus Notification System</p>
     </div>
     <div class="content">
       <p style="margin-top: 0;">Hello,</p>
@@ -125,7 +182,7 @@ This is an automated notification. Please do not reply to this email.
       <table class="info-table">
         <tr>
           <td class="label">Complaint Reference</td>
-          <td class="value"><span style="font-family: monospace; font-size: 15px; color: #2563eb;">{complaint_code}</span></td>
+          <td class="value"><span style="font-family: monospace; font-size: 15px; color: #ea580c;">{complaint_code}</span></td>
         </tr>
         <tr>
           <td class="label">Category</td>
@@ -145,7 +202,7 @@ This is an automated notification. Please do not reply to this email.
         </tr>
         <tr>
           <td class="label">Current Status</td>
-          <td class="value"><span style="color: #0284c7; font-weight: 700;">SUBMITTED</span></td>
+          <td class="value"><span style="color: #ea580c; font-weight: 700;">SUBMITTED</span></td>
         </tr>
       </table>
 
@@ -154,13 +211,13 @@ This is an automated notification. Please do not reply to this email.
         {summary}
       </div>
 
-      <p style="font-size: 13px; color: #64748b;">
+      <p style="font-size: 13px; color: #78716c;">
         Please use the college-approved process or authorized secure portal to review updates and timeline progress.
       </p>
     </div>
     <div class="footer">
       This is an automated notification generated by CampusCare.<br>
-      Please do not reply directly to this email.
+      Target notification address: anilanji22515@gmail.com
     </div>
   </div>
 </body>

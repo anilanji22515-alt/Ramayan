@@ -682,7 +682,9 @@ async function submitComplaint(e) {
       }
 
       closeComplaintModal();
-      showToast(`Complaint ${data.complaint_code} submitted! Parent notification dispatched to anilanji22515@gmail.com`, 'success');
+      const emailStatus = data.email_notification?.status || 'SENT';
+      const emailNote = data.email_notification?.is_simulated ? ' (Outbox Simulation Logged)' : ' (Live Delivered)';
+      showToast(`Complaint ${data.complaint_code} submitted! Parent notification dispatched to anilanji22515@gmail.com [${emailStatus}${emailNote}]`, 'success');
       await loadComplaints();
       await loadNotifications();
       viewComplaintDetail(data.complaint_id);
@@ -904,7 +906,7 @@ async function loadAdminAnalytics() {
 }
 
 function renderAnalyticsCharts(data) {
-  // Chart 1: Categories (Donut)
+  // Chart 1: Categories (Donut in warm orange, amber, coral)
   const ctxCat = document.getElementById('chart-categories');
   if (ctxCat) {
     if (charts.categories) charts.categories.destroy();
@@ -915,7 +917,7 @@ function renderAnalyticsCharts(data) {
         labels: topCats.map(c => c.name),
         datasets: [{
           data: topCats.map(c => c.count),
-          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+          backgroundColor: ['#f97316', '#ea580c', '#f59e0b', '#fb923c', '#d97706']
         }]
       },
       options: {
@@ -926,7 +928,7 @@ function renderAnalyticsCharts(data) {
     });
   }
 
-  // Chart 2: Status Distribution (Pie)
+  // Chart 2: Status Distribution (Pie in orange/warm tones)
   const ctxStatus = document.getElementById('chart-status');
   if (ctxStatus) {
     if (charts.status) charts.status.destroy();
@@ -936,7 +938,7 @@ function renderAnalyticsCharts(data) {
         labels: data.statuses.map(s => s.status.replace('_', ' ')),
         datasets: [{
           data: data.statuses.map(s => s.count),
-          backgroundColor: ['#0284c7', '#7c3aed', '#4f46e5', '#d97706', '#059669', '#475569', '#dc2626']
+          backgroundColor: ['#f97316', '#f59e0b', '#fb923c', '#d97706', '#10b981', '#78716c', '#dc2626']
         }]
       },
       options: {
@@ -947,7 +949,7 @@ function renderAnalyticsCharts(data) {
     });
   }
 
-  // Chart 3: Department Workload (Bar)
+  // Chart 3: Department Workload (Bar in orange & emerald)
   const ctxDept = document.getElementById('chart-departments');
   if (ctxDept) {
     if (charts.departments) charts.departments.destroy();
@@ -957,8 +959,8 @@ function renderAnalyticsCharts(data) {
       data: {
         labels: topDepts.map(d => d.name.split(' ')[0]),
         datasets: [
-          { label: 'Total', data: topDepts.map(d => d.total), backgroundColor: '#94a3b8' },
-          { label: 'Resolved', data: topDepts.map(d => d.resolved), backgroundColor: '#10b981' }
+          { label: 'Total', data: topDepts.map(d => d.total), backgroundColor: '#fdba74' },
+          { label: 'Resolved', data: topDepts.map(d => d.resolved), backgroundColor: '#ea580c' }
         ]
       },
       options: {
@@ -973,18 +975,19 @@ function renderAnalyticsCharts(data) {
 
 function switchAdminTab(tab) {
   document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-    btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-    btn.classList.add('text-slate-500');
+    btn.classList.remove('text-orange-600', 'border-b-2', 'border-orange-500');
+    btn.classList.add('text-stone-500');
   });
   
   const activeBtn = document.getElementById(`tab-btn-${tab}`);
   if (activeBtn) {
-    activeBtn.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-    activeBtn.classList.remove('text-slate-500');
+    activeBtn.classList.add('text-orange-600', 'border-b-2', 'border-orange-500');
+    activeBtn.classList.remove('text-stone-500');
   }
 
   document.getElementById('admin-tab-complaints').classList.add('hidden');
   document.getElementById('admin-tab-outbox').classList.add('hidden');
+  document.getElementById('admin-tab-email-settings')?.classList.add('hidden');
   document.getElementById('admin-tab-routing').classList.add('hidden');
 
   if (tab === 'complaints') {
@@ -992,8 +995,60 @@ function switchAdminTab(tab) {
   } else if (tab === 'outbox') {
     document.getElementById('admin-tab-outbox').classList.remove('hidden');
     loadOutbox();
+  } else if (tab === 'email-settings') {
+    document.getElementById('admin-tab-email-settings').classList.remove('hidden');
+    loadEmailSettings();
   } else if (tab === 'routing') {
     document.getElementById('admin-tab-routing').classList.remove('hidden');
+  }
+}
+
+async function loadEmailSettings() {
+  try {
+    const res = await fetch('/api/admin/email-settings');
+    const data = await res.json();
+    if (!res.ok) return;
+
+    const s = data.settings;
+    document.getElementById('setting-parent-email').value = s.PARENT_NOTIFICATION_EMAIL || 'anilanji22515@gmail.com';
+    document.getElementById('setting-email-enabled').checked = !!s.EMAIL_ENABLED;
+    document.getElementById('setting-smtp-host').value = s.SMTP_HOST || 'smtp.gmail.com';
+    document.getElementById('setting-smtp-port').value = s.SMTP_PORT || 587;
+    document.getElementById('setting-smtp-user').value = s.SMTP_USER || '';
+    document.getElementById('setting-smtp-password').value = s.SMTP_PASSWORD || '';
+    document.getElementById('setting-email-from').value = s.EMAIL_FROM || '';
+  } catch (err) {
+    console.error("Failed to load email settings:", err);
+  }
+}
+
+async function saveEmailSettings(e) {
+  e.preventDefault();
+  const payload = {
+    PARENT_NOTIFICATION_EMAIL: document.getElementById('setting-parent-email').value.trim(),
+    EMAIL_ENABLED: document.getElementById('setting-email-enabled').checked ? 'true' : 'false',
+    SMTP_HOST: document.getElementById('setting-smtp-host').value.trim(),
+    SMTP_PORT: document.getElementById('setting-smtp-port').value.trim(),
+    SMTP_USER: document.getElementById('setting-smtp-user').value.trim(),
+    SMTP_PASSWORD: document.getElementById('setting-smtp-password').value.trim(),
+    EMAIL_FROM: document.getElementById('setting-email-from').value.trim()
+  };
+
+  try {
+    const res = await fetch('/api/admin/email-settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast('Email settings saved successfully!', 'success');
+      document.getElementById('outbox-email-label').textContent = payload.PARENT_NOTIFICATION_EMAIL;
+    } else {
+      showToast(data.error || 'Failed to save settings', 'error');
+    }
+  } catch (err) {
+    showToast('Failed to connect to server', 'error');
   }
 }
 
@@ -1071,13 +1126,18 @@ async function sendDiagnosticEmail() {
     statusBox.classList.remove('hidden');
     
     if (res.ok) {
-      statusBox.className = 'p-3 rounded-xl text-xs space-y-1 bg-emerald-50 border border-emerald-200 text-emerald-900';
+      const isSent = (data.result.status === 'SENT');
+      statusBox.className = `p-3 rounded-2xl text-xs space-y-1.5 ${isSent ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-orange-50 border border-orange-200 text-orange-900'}`;
       statusBox.innerHTML = `
-        <div class="font-bold flex items-center space-x-1.5"><i class="fa-solid fa-circle-check text-emerald-600"></i><span>Outbox Delivery State: ${data.result.status}</span></div>
-        <div class="text-[11px]">Provider Message ID: <code class="font-mono bg-emerald-100 px-1 rounded">${data.result.message_id}</code></div>
-        <p class="text-[10px] text-emerald-700 mt-1">Logged in outbox table with recipient ${recipient}.</p>
+        <div class="font-bold flex items-center space-x-1.5">
+          <i class="fa-solid ${isSent ? 'fa-circle-check text-emerald-600' : 'fa-circle-info text-orange-600'}"></i>
+          <span>Delivery State: ${data.result.status} ${isSent ? '(Live Email Sent)' : '(Recorded in Outbox)'}</span>
+        </div>
+        <div class="text-[11px]">Recipient: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-orange-200">${recipient}</code></div>
+        <div class="text-[11px]">Provider Message ID: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-orange-200">${data.result.message_id}</code></div>
+        <p class="text-[11px] text-stone-600 pt-0.5">${data.result.note || 'Delivery audit record saved.'}</p>
       `;
-      showToast('Diagnostic email recorded in outbox', 'success');
+      showToast(isSent ? 'Live email sent successfully!' : 'Recorded in outbox', 'success');
       loadOutbox();
     } else {
       statusBox.className = 'p-3 rounded-xl text-xs space-y-1 bg-red-50 border border-red-200 text-red-900';

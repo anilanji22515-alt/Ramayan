@@ -12,6 +12,18 @@ def get_db():
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
+def log_audit(actor_id, action, entity_type, entity_id, details, ip=None):
+    try:
+        conn = get_db()
+        conn.execute("""
+            INSERT INTO audit_logs (actor_user_id, action, entity_type, entity_id, details, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (actor_id, action, entity_type, str(entity_id), details, ip))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Failed to write audit log: {e}")
+
 def init_db():
     os.makedirs(os.path.dirname(Config.DATABASE_PATH), exist_ok=True)
     os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
@@ -232,6 +244,21 @@ def init_db():
         setting_key TEXT PRIMARY KEY,
         setting_value TEXT NOT NULL,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    # 14. Audit Logs (Section 14 Specification)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS audit_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        actor_user_id INTEGER,
+        action TEXT NOT NULL,
+        entity_type TEXT NOT NULL,
+        entity_id TEXT,
+        details TEXT,
+        ip_address TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (actor_user_id) REFERENCES users(id)
     )
     ''')
     

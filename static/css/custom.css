@@ -1,95 +1,122 @@
-/* CampusCare Custom Aesthetics */
+/* CampusCare - White & Light Orange Theme System */
 
-/* Smooth custom scrollbars */
+:root {
+  --brand-orange-50: #fff7ed;
+  --brand-orange-100: #ffedd5;
+  --brand-orange-200: #fed7aa;
+  --brand-orange-300: #fdba74;
+  --brand-orange-400: #fb923c;
+  --brand-orange-500: #f97316;
+  --brand-orange-600: #ea580c;
+  --brand-orange-700: #c2410c;
+  --brand-orange-800: #9a3412;
+  --brand-orange-900: #7c2d12;
+}
+
+body {
+  background-color: #fffaf5;
+  color: #292524;
+}
+
+/* Custom Scrollbars in soft orange & warm gray */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #fff7ed;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #fdba74;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #f97316;
 }
 
 /* Status Badges */
 .badge-status-SUBMITTED {
-  background-color: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
-}
-.badge-status-UNDER_REVIEW {
-  background-color: #f3e8ff;
-  color: #7e22ce;
-  border: 1px solid #e9d5ff;
-}
-.badge-status-ASSIGNED {
-  background-color: #e0e7ff;
-  color: #4338ca;
-  border: 1px solid #c7d2fe;
-}
-.badge-status-IN_PROGRESS {
-  background-color: #fef3c7;
-  color: #b45309;
-  border: 1px solid #fde68a;
-}
-.badge-status-ON_HOLD {
-  background-color: #ffedd5;
+  background-color: #fff7ed;
   color: #c2410c;
   border: 1px solid #fed7aa;
 }
+.badge-status-UNDER_REVIEW {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.badge-status-ASSIGNED {
+  background-color: #ffedd5;
+  color: #9a3412;
+  border: 1px solid #fdba74;
+}
+.badge-status-IN_PROGRESS {
+  background-color: #fefce8;
+  color: #854d0e;
+  border: 1px solid #fef08a;
+}
+.badge-status-ON_HOLD {
+  background-color: #fff1f2;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+}
 .badge-status-RESOLVED {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: #f0fdf4;
+  color: #166534;
   border: 1px solid #bbf7d0;
 }
 .badge-status-CLOSED {
-  background-color: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  background-color: #fafaf9;
+  color: #57534e;
+  border: 1px solid #e7e5e4;
 }
 .badge-status-REJECTED {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: #fef2f2;
+  color: #991b1b;
   border: 1px solid #fecaca;
 }
 .badge-status-REOPENED {
-  background-color: #ffe4e6;
+  background-color: #fff1f2;
   color: #be123c;
   border: 1px solid #fecdd3;
 }
 
 /* Priority Badges */
 .badge-priority-EMERGENCY {
-  background-color: #fee2e2;
+  background-color: #fef2f2;
   color: #991b1b;
   border: 1px solid #f87171;
   font-weight: 800;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: emergency-glow 2s infinite ease-in-out;
 }
 .badge-priority-HIGH {
-  background-color: #ffedd5;
-  color: #9a3412;
-  border: 1px solid #fdba74;
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fb923c;
   font-weight: 700;
 }
 .badge-priority-MEDIUM {
-  background-color: #fef9c3;
-  color: #854d0e;
-  border: 1px solid #fde047;
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
   font-weight: 600;
 }
 .badge-priority-LOW {
   background-color: #f0fdf4;
   color: #166534;
-  border: 1px solid #bbf7d0;
+  border: 1px solid #86efac;
 }
 
-/* Timeline node styles */
+@keyframes emergency-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Timeline node styles in light orange */
 .timeline-item {
   position: relative;
   padding-bottom: 1.25rem;
@@ -101,7 +128,7 @@
   width: 0.85rem;
   height: 0.85rem;
   border-radius: 9999px;
-  background-color: #3b82f6;
+  background-color: #f97316;
   border: 2px solid #ffffff;
-  box-shadow: 0 0 0 2px #93c5fd;
+  box-shadow: 0 0 0 2px #fdba74;
 }

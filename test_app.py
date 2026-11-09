@@ -96,5 +96,24 @@ class CampusCareTestCase(unittest.TestCase):
         self.assertIn('outbox', outbox)
         self.assertEqual(outbox['configured_recipient'], 'anilanji22515@gmail.com')
 
+    def test_06_admin_email_configuration_settings(self):
+        """Test getting and updating email & SMTP configuration"""
+        self.client.post('/api/auth/demo-login', json={'role': 'admin'})
+        # Get settings
+        res = self.client.get('/api/admin/email-settings')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['settings']['PARENT_NOTIFICATION_EMAIL'], 'anilanji22515@gmail.com')
+
+        # Update settings
+        update_res = self.client.post('/api/admin/email-settings', json={
+            'PARENT_NOTIFICATION_EMAIL': 'anilanji22515@gmail.com',
+            'EMAIL_ENABLED': 'true',
+            'SMTP_HOST': 'smtp.gmail.com',
+            'SMTP_PORT': '587',
+            'SMTP_USER': 'test@gmail.com'
+        })
+        self.assertEqual(update_res.status_code, 200)
+
 if __name__ == '__main__':
     unittest.main()

@@ -281,7 +281,8 @@ def handle_complaints():
         
         # MANDATORY EMAIL NOTIFICATION REQUIREMENT
         # Backend queues / sends email notification to: anilanji22515@gmail.com
-        recipient_email = Config.PARENT_NOTIFICATION_EMAIL
+        smtp_cfg = EmailService.get_smtp_settings()
+        recipient_email = smtp_cfg.get('recipient') or Config.PARENT_NOTIFICATION_EMAIL or 'anilanji22515@gmail.com'
         summary_snippet = description[:150] + ("..." if len(description) > 150 else "")
         subject, body_text, body_html = EmailService.format_complaint_email(
             complaint_code=complaint_code,
@@ -292,8 +293,8 @@ def handle_complaints():
             submitted_at=now_str
         )
         
-        # Send or Simulate delivery
-        email_result = EmailService.send_notification(recipient_email, subject, body_text, body_html)
+        # Send or Simulate delivery using SMTP settings
+        email_result = EmailService.send_notification(recipient_email, subject, body_text, body_html, override_settings=smtp_cfg)
         delivery_status = email_result['status']
         provider_msg_id = email_result.get('message_id')
         error_msg = email_result.get('error')
@@ -922,6 +923,50 @@ def retry_outbox_email(outbox_id):
     conn.close()
     
     return jsonify({'success': True, 'result': res}), 200
+
+@app.route('/api/admin/email-settings', methods=['GET', 'POST'])
+def handle_email_settings():
+    user = get_current_user()
+    if not user or user['role'] not in ('admin', 'system_admin'):
+        return jsonify({'error': 'Unauthorized'}), 403
+        
+    conn = get_db()
+    if request.method == 'POST':
+        data = request.get_json() or {}
+        keys = ['EMAIL_ENABLED', 'SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASSWORD', 'EMAIL_FROM', 'PARENT_NOTIFICATION_EMAIL']
+        cursor = conn.cursor()
+        for k in keys:
+            if k in data and data[k] is not None:
+                val = str(data[k]).strip()
+                # Skip updating password if user left it as placeholder
+                if k == 'SMTP_PASSWORD' and val in ('••••••••', ''):
+                    continue
+                cursor.execute("""
+                    INSERT INTO system_settings (setting_key, setting_value, updated_at)
+                    VALUES (?, ?, CURRENT_TIMESTAMP)
+                    ON CONFLICT(setting_key) DO UPDATE SET
+                        setting_value = excluded.setting_value,
+                        updated_at = excluded.updated_at
+                """, (k, val))
+        conn.commit()
+        conn.close()
+        return jsonify({'success': True, 'message': 'Email configuration saved successfully'}), 200
+        
+    cfg = EmailService.get_smtp_settings()
+    has_pwd = bool(cfg.get('password'))
+    conn.close()
+    return jsonify({
+        'settings': {
+            'EMAIL_ENABLED': cfg.get('enabled', False),
+            'SMTP_HOST': cfg.get('host', 'smtp.gmail.com'),
+            'SMTP_PORT': cfg.get('port', 587),
+            'SMTP_USER': cfg.get('user', ''),
+            'SMTP_PASSWORD': '••••••••' if has_pwd else '',
+            'has_password': has_pwd,
+            'EMAIL_FROM': cfg.get('from_email', ''),
+            'PARENT_NOTIFICATION_EMAIL': cfg.get('recipient', 'anilanji22515@gmail.com')
+        }
+    }), 200
 
 @app.route('/api/admin/export', methods=['GET'])
 def export_complaints_csv():

@@ -16,14 +16,17 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              800: '#1e40af',
-              900: '#1e3a8a',
+            orange: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
             }
           }
         }
@@ -31,43 +34,43 @@
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+<body class="bg-[#fffbf7] text-stone-800 min-h-screen flex flex-col font-sans antialiased selection:bg-orange-200 selection:text-orange-900">
 
-  <!-- Top Navigation Bar -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+  <!-- Top Navigation Bar (White with Warm Light Orange Accents) -->
+  <header class="bg-white border-b border-orange-100 sticky top-0 z-40 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Logo & System Title -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="window.location.reload()">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/25">
           <i class="fa-solid fa-building-shield text-lg"></i>
         </div>
         <div>
           <div class="flex items-center space-x-2">
-            <span class="text-xl font-extrabold tracking-tight text-slate-900">Campus<span class="text-blue-600">Care</span></span>
-            <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Prototype v2.0</span>
+            <span class="text-xl font-extrabold tracking-tight text-stone-900">Campus<span class="text-orange-500">Care</span></span>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-700 px-2.5 py-0.5 rounded-full border border-orange-200">Prototype v2.0</span>
           </div>
-          <p class="text-xs text-slate-500 hidden sm:block">Campus Problem Reporting & Management System</p>
+          <p class="text-xs text-stone-400 hidden sm:block">Campus Problem Reporting & Management System</p>
         </div>
       </div>
 
       <!-- Center: Instant Role Switcher for Demo Evaluator -->
-      <div id="demo-role-bar" class="hidden md:flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold text-slate-600 border border-slate-200">
-        <span class="px-2 text-slate-400 font-medium">Demo Switch:</span>
-        <button onclick="demoLogin('student')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="student">
-          <i class="fa-solid fa-user-graduate mr-1 text-blue-500"></i>Student
+      <div id="demo-role-bar" class="hidden md:flex items-center bg-orange-50/70 p-1 rounded-2xl text-xs font-semibold text-stone-600 border border-orange-100">
+        <span class="px-2 text-stone-400 font-medium">Demo Switch:</span>
+        <button onclick="demoLogin('student')" class="demo-btn px-2.5 py-1 rounded-xl hover:bg-white hover:text-orange-600 hover:shadow-xs transition" data-role="student">
+          <i class="fa-solid fa-user-graduate mr-1 text-orange-500"></i>Student
         </button>
-        <button onclick="demoLogin('staff')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="staff">
+        <button onclick="demoLogin('staff')" class="demo-btn px-2.5 py-1 rounded-xl hover:bg-white hover:text-orange-600 hover:shadow-xs transition" data-role="staff">
           <i class="fa-solid fa-wrench mr-1 text-amber-500"></i>Staff
         </button>
-        <button onclick="demoLogin('department_head')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="department_head">
-          <i class="fa-solid fa-user-tie mr-1 text-indigo-500"></i>Dept Head
+        <button onclick="demoLogin('department_head')" class="demo-btn px-2.5 py-1 rounded-xl hover:bg-white hover:text-orange-600 hover:shadow-xs transition" data-role="department_head">
+          <i class="fa-solid fa-user-tie mr-1 text-stone-600"></i>Dept Head
         </button>
-        <button onclick="demoLogin('admin')" class="demo-btn px-2.5 py-1 rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-xs transition" data-role="admin">
-          <i class="fa-solid fa-shield-halved mr-1 text-emerald-500"></i>Admin
+        <button onclick="demoLogin('admin')" class="demo-btn px-2.5 py-1 rounded-xl hover:bg-white hover:text-orange-600 hover:shadow-xs transition" data-role="admin">
+          <i class="fa-solid fa-shield-halved mr-1 text-emerald-600"></i>Admin
         </button>
-        <span class="border-l border-slate-300 h-4 mx-1"></span>
-        <button onclick="startGuidedTour()" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs transition flex items-center space-x-1" title="Start Section 39 Step-by-Step Presentation Script">
+        <span class="border-l border-orange-200 h-4 mx-1"></span>
+        <button onclick="startGuidedTour()" class="px-2.5 py-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold shadow-xs transition flex items-center space-x-1" title="Start Section 39 Step-by-Step Presentation Script">
           <i class="fa-solid fa-play text-[10px]"></i>
           <span>Guided Tour</span>
         </button>
@@ -77,36 +80,36 @@
       <div class="flex items-center space-x-3">
         <!-- In-App Notifications -->
         <div class="relative" id="notif-wrapper">
-          <button id="notif-btn" onclick="toggleNotifications()" class="relative p-2 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-full transition">
+          <button id="notif-btn" onclick="toggleNotifications()" class="relative p-2 text-stone-500 hover:text-orange-600 hover:bg-orange-50 rounded-full transition">
             <i class="fa-regular fa-bell text-lg"></i>
             <span id="notif-badge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
           </button>
           
           <!-- Dropdown Panel -->
-          <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 overflow-hidden">
-            <div class="p-3 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">In-App Notifications</span>
-              <span id="notif-count-text" class="text-xs text-blue-600 font-medium">0 updates</span>
+          <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-orange-100 rounded-3xl shadow-xl z-50 overflow-hidden">
+            <div class="p-3.5 bg-orange-50/70 border-b border-orange-100 flex justify-between items-center">
+              <span class="text-xs font-bold text-stone-800 uppercase tracking-wider">In-App Notifications</span>
+              <span id="notif-count-text" class="text-xs text-orange-600 font-medium">0 updates</span>
             </div>
-            <div id="notif-list" class="max-h-72 overflow-y-auto divide-y divide-slate-100 p-1">
-              <div class="p-4 text-center text-xs text-slate-400">No new notifications</div>
+            <div id="notif-list" class="max-h-72 overflow-y-auto divide-y divide-orange-50 p-1">
+              <div class="p-4 text-center text-xs text-stone-400">No new notifications</div>
             </div>
           </div>
         </div>
 
         <!-- User Profile Pill -->
-        <div id="user-profile-pill" class="hidden items-center space-x-2 pl-2 border-l border-slate-200">
+        <div id="user-profile-pill" class="hidden items-center space-x-2 pl-2 border-l border-orange-100">
           <div class="text-right">
-            <div id="nav-user-name" class="text-xs font-bold text-slate-800 leading-tight">User</div>
-            <div id="nav-user-role" class="text-[10px] font-semibold text-blue-600 uppercase">Role</div>
+            <div id="nav-user-name" class="text-xs font-bold text-stone-900 leading-tight">User</div>
+            <div id="nav-user-role" class="text-[10px] font-semibold text-orange-600 uppercase">Role</div>
           </div>
-          <button onclick="logout()" title="Logout" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+          <button onclick="logout()" title="Logout" class="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition">
             <i class="fa-solid fa-right-from-bracket"></i>
           </button>
         </div>
 
         <!-- Auth Button if Logged Out -->
-        <button id="nav-login-btn" onclick="openAuthModal()" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition">
+        <button id="nav-login-btn" onclick="openAuthModal()" class="px-4 py-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-2xl shadow-sm shadow-orange-500/20 transition">
           Sign In
         </button>
       </div>
@@ -115,7 +118,7 @@
   </header>
 
   <!-- Emergency Banner Alert Component -->
-  <div id="emergency-alert-bar" class="hidden bg-gradient-to-r from-red-600 to-rose-700 text-white px-4 py-2 text-xs font-medium text-center flex items-center justify-center space-x-2 shadow-inner">
+  <div id="emergency-alert-bar" class="hidden bg-gradient-to-r from-red-600 to-rose-600 text-white px-4 py-2 text-xs font-medium text-center flex items-center justify-center space-x-2 shadow-inner">
     <i class="fa-solid fa-triangle-exclamation animate-bounce text-sm"></i>
     <span><strong>EMERGENCY NOTICE:</strong> Immediate danger to life or safety? Call Campus Security directly at <strong>+91-911 / Ext. 911</strong> or Health Clinic at <strong>Ext. 108</strong>. Submitting a ticket does not replace urgent calls!</span>
   </div>
@@ -126,63 +129,63 @@
     <!-- 1. GUEST / LANDING HERO (Shown if not logged in) -->
     <div id="view-landing" class="hidden space-y-12 py-8">
       <div class="text-center max-w-3xl mx-auto space-y-4">
-        <span class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
-          <i class="fa-solid fa-sparkles text-blue-500"></i>
+        <span class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-xs font-semibold">
+          <i class="fa-solid fa-sparkles text-orange-500"></i>
           <span>Centralized & Transparent Campus Problem Resolution</span>
         </span>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-stone-900 tracking-tight">
           Report campus issues effortlessly, track progress transparently.
         </h1>
-        <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
-          One unified platform for students, faculty, and administrators. Auto-routes complaints to responsible maintenance departments, sends verified parent notifications, and monitors SLAs.
+        <p class="text-base sm:text-lg text-stone-600 leading-relaxed">
+          One unified platform for students, maintenance staff, and administrators. Auto-routes complaints across 16 categories, dispatches automated parent notifications to <strong class="text-orange-600">anilanji22515@gmail.com</strong>, and monitors campus resolution SLAs.
         </p>
 
         <!-- Fast Demo Quick Launcher -->
         <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
-          <button onclick="demoLogin('student')" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition flex items-center space-x-2">
+          <button onclick="demoLogin('student')" class="px-5 py-3 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm shadow-lg shadow-orange-500/25 transition flex items-center space-x-2">
             <i class="fa-solid fa-user-graduate"></i>
             <span>Demo as Student (Rahul)</span>
           </button>
-          <button onclick="demoLogin('staff')" class="px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold text-sm shadow-xs transition flex items-center space-x-2">
+          <button onclick="demoLogin('staff')" class="px-5 py-3 rounded-2xl bg-white hover:bg-orange-50 text-stone-700 border border-orange-200 font-semibold text-sm shadow-xs transition flex items-center space-x-2">
             <i class="fa-solid fa-wrench text-amber-500"></i>
             <span>Demo as Staff</span>
           </button>
-          <button onclick="demoLogin('admin')" class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-semibold text-sm shadow-md transition flex items-center space-x-2">
+          <button onclick="demoLogin('admin')" class="px-5 py-3 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-semibold text-sm shadow-md transition flex items-center space-x-2">
             <i class="fa-solid fa-shield-halved text-emerald-400"></i>
             <span>Demo as Administrator</span>
           </button>
         </div>
       </div>
 
-      <!-- Feature Highlight Cards -->
+      <!-- Feature Highlight Cards in White and Light Orange -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4">
+        <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-xs hover:border-orange-300 transition">
+          <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl mb-4 border border-orange-100">
             <i class="fa-solid fa-bolt"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900 mb-2">Smart Automatic Routing</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Complaints in 16 categories automatically dispatch to Plumbing, Electrical, IT, Civil, Mess, or Security queues with SLA deadlines.
+          <h3 class="text-base font-bold text-stone-900 mb-2">Smart Automatic Routing</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">
+            Complaints across 16 categories automatically dispatch to Plumbing, Electrical, IT, Civil, Mess, or Security queues with SLA deadlines.
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4">
+        <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-xs hover:border-orange-300 transition">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 border border-amber-100">
             <i class="fa-solid fa-envelope-circle-check"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900 mb-2">Automated Notifications</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Backend triggers instant notification dispatch to configured parent/guardian recipient (<code>anilanji22515@gmail.com</code>) with outbox tracking.
+          <h3 class="text-base font-bold text-stone-900 mb-2">Automated Notifications</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">
+            Backend triggers instant notification dispatch to configured parent/guardian recipient (<code>anilanji22515@gmail.com</code>) with outbox audit tracking.
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition">
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4">
+        <div class="bg-white p-6 rounded-3xl border border-orange-100 shadow-xs hover:border-orange-300 transition">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4 border border-emerald-100">
             <i class="fa-solid fa-timeline"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900 mb-2">Transparent Status Workflow</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Full audit timeline: Submitted &rarr; Assigned &rarr; In Progress &rarr; Resolved &rarr; Feedback. Internal notes protected.
+          <h3 class="text-base font-bold text-stone-900 mb-2">Transparent Status Workflow</h3>
+          <p class="text-xs text-stone-600 leading-relaxed">
+            Full audit timeline: Submitted &rarr; Assigned &rarr; In Progress &rarr; Resolved &rarr; Feedback. Internal technician notes are securely protected.
           </p>
         </div>
       </div>
@@ -191,8 +194,8 @@
     <!-- 2. STUDENT DASHBOARD VIEW -->
     <div id="view-student" class="hidden space-y-6">
       
-      <!-- Top Actions & Profile Bar -->
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+      <!-- Top Actions & Profile Bar (Warm Orange Gradient) -->
+      <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div class="space-y-1">
             <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-semibold">
@@ -200,48 +203,48 @@
               <span id="student-branch-year">Student Portal • Computer Science - Year 2</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Welcome, <span id="student-name-display">Rahul</span></h2>
-            <p class="text-blue-100 text-xs sm:text-sm max-w-xl">
-              Report campus problems with evidence and track resolution milestones in real-time.
+            <p class="text-orange-100 text-xs sm:text-sm max-w-xl">
+              Report campus problems with photo evidence and track resolution milestones in real-time.
             </p>
           </div>
           
-          <button onclick="openComplaintModal()" class="self-start md:self-auto px-6 py-3.5 bg-white text-blue-700 hover:bg-blue-50 font-bold text-sm rounded-2xl shadow-lg transition flex items-center space-x-2 shrink-0">
+          <button onclick="openComplaintModal()" class="self-start md:self-auto px-6 py-3.5 bg-white text-orange-600 hover:bg-orange-50 font-bold text-sm rounded-2xl shadow-lg transition flex items-center space-x-2 shrink-0">
             <i class="fa-solid fa-plus-circle text-lg"></i>
             <span>Report a Campus Problem</span>
           </button>
         </div>
       </div>
 
-      <!-- Quick Stats Grid -->
+      <!-- Quick Stats Grid in White and Light Orange -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-slate-400 text-xs font-semibold">Total Submitted</div>
-          <div id="stat-student-total" class="text-2xl font-black text-slate-900 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-stone-400 text-xs font-semibold">Total Submitted</div>
+          <div id="stat-student-total" class="text-2xl font-black text-stone-900 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-blue-500 text-xs font-semibold">Under Review</div>
-          <div id="stat-student-review" class="text-2xl font-black text-blue-600 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-amber-500 text-xs font-semibold">Under Review</div>
+          <div id="stat-student-review" class="text-2xl font-black text-amber-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-amber-500 text-xs font-semibold">In Progress</div>
-          <div id="stat-student-progress" class="text-2xl font-black text-amber-600 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-orange-500 text-xs font-semibold">In Progress</div>
+          <div id="stat-student-progress" class="text-2xl font-black text-orange-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
           <div class="text-emerald-500 text-xs font-semibold">Resolved / Closed</div>
           <div id="stat-student-resolved" class="text-2xl font-black text-emerald-600 mt-1">0</div>
         </div>
       </div>
 
       <!-- Complaints Management Table -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="bg-white rounded-3xl border border-orange-100 shadow-xs overflow-hidden">
+        <div class="p-5 border-b border-orange-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-orange-50/20">
           <div>
-            <h3 class="text-base font-bold text-slate-900">My Problem Reports</h3>
-            <p class="text-xs text-slate-500">Track all campus maintenance reports submitted by you</p>
+            <h3 class="text-base font-bold text-stone-900">My Problem Reports</h3>
+            <p class="text-xs text-stone-500">Track all campus maintenance reports submitted by you</p>
           </div>
           
           <div class="flex items-center space-x-3">
-            <select id="filter-student-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-700">
+            <select id="filter-student-status" onchange="loadComplaints()" class="text-xs bg-white border border-orange-200 rounded-xl px-3 py-2 font-medium text-stone-700">
               <option value="">All Statuses</option>
               <option value="SUBMITTED">Submitted</option>
               <option value="UNDER_REVIEW">Under Review</option>
@@ -252,15 +255,15 @@
             </select>
 
             <div class="relative">
-              <input type="text" id="filter-student-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search ID, title..." class="text-xs bg-slate-50 border border-slate-300 rounded-xl pl-8 pr-3 py-2 w-48 focus:w-64 transition-all">
-              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+              <input type="text" id="filter-student-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search ID, title..." class="text-xs bg-white border border-orange-200 rounded-xl pl-8 pr-3 py-2 w-48 focus:w-64 transition-all">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-stone-400 text-xs"></i>
             </div>
           </div>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
-            <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200">
+            <thead class="bg-orange-50/50 text-stone-500 uppercase tracking-wider font-semibold border-b border-orange-100">
               <tr>
                 <th class="px-5 py-3">Complaint ID</th>
                 <th class="px-5 py-3">Title & Summary</th>
@@ -271,7 +274,7 @@
                 <th class="px-5 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="student-complaints-tbody" class="divide-y divide-slate-100">
+            <tbody id="student-complaints-tbody" class="divide-y divide-orange-50">
               <!-- Dynamically Populated -->
             </tbody>
           </table>
@@ -284,18 +287,18 @@
     <div id="view-department" class="hidden space-y-6">
       
       <!-- Department Header -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="bg-white rounded-3xl border border-orange-100 p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center space-x-2">
-            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800" id="dept-badge-role">Staff Portal</span>
-            <span class="text-xs text-slate-500" id="dept-assigned-name">Plumbing and Water Maintenance</span>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800" id="dept-badge-role">Staff Portal</span>
+            <span class="text-xs text-stone-500" id="dept-assigned-name">Plumbing and Water Maintenance</span>
           </div>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Department Action Queue</h2>
-          <p class="text-xs text-slate-500">Review tickets assigned to your department, update timelines, and upload resolution proof.</p>
+          <h2 class="text-2xl font-extrabold text-stone-900 mt-1">Department Action Queue</h2>
+          <p class="text-xs text-stone-500">Review tickets assigned to your department, update timelines, and upload resolution proof.</p>
         </div>
 
         <div class="flex items-center space-x-3">
-          <select id="filter-dept-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-medium">
+          <select id="filter-dept-status" onchange="loadComplaints()" class="text-xs bg-white border border-orange-200 rounded-xl px-3 py-2 font-medium">
             <option value="">All Statuses</option>
             <option value="SUBMITTED">New (Submitted)</option>
             <option value="ASSIGNED">Assigned</option>
@@ -312,15 +315,15 @@
       </div>
 
       <!-- Department Queue Table -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
-          <h3 class="text-sm font-bold text-slate-900">Assigned Department Complaints</h3>
-          <span id="dept-queue-count" class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-full">0 tickets</span>
+      <div class="bg-white rounded-3xl border border-orange-100 shadow-xs overflow-hidden">
+        <div class="p-4 border-b border-orange-100 flex justify-between items-center bg-orange-50/20">
+          <h3 class="text-sm font-bold text-stone-900">Assigned Department Complaints</h3>
+          <span id="dept-queue-count" class="text-xs bg-orange-100 text-orange-800 font-semibold px-2.5 py-1 rounded-full">0 tickets</span>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
-            <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200">
+            <thead class="bg-orange-50/50 text-stone-500 uppercase tracking-wider font-semibold border-b border-orange-100">
               <tr>
                 <th class="px-5 py-3">ID & Priority</th>
                 <th class="px-5 py-3">Title & Issue</th>
@@ -331,7 +334,7 @@
                 <th class="px-5 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody id="dept-complaints-tbody" class="divide-y divide-slate-100">
+            <tbody id="dept-complaints-tbody" class="divide-y divide-orange-50">
               <!-- Dynamically Populated -->
             </tbody>
           </table>
@@ -344,53 +347,53 @@
     <div id="view-admin" class="hidden space-y-6">
       
       <!-- Admin Top Banner -->
-      <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="bg-gradient-to-r from-stone-900 via-stone-800 to-orange-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div class="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-semibold">
+          <div class="inline-flex items-center space-x-2 bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-xs font-semibold border border-orange-400/30">
             <i class="fa-solid fa-shield-halved"></i>
             <span>Central Campus Administrator Console</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">CampusCare Operations & Analytics</h2>
-          <p class="text-slate-400 text-xs sm:text-sm max-w-xl">
+          <p class="text-stone-300 text-xs sm:text-sm max-w-xl">
             Real-time campus problem telemetry, SLA compliance, department routing rules, and notification outbox audits.
           </p>
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <button onclick="exportCSV()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center space-x-2">
-            <i class="fa-solid fa-file-csv text-emerald-400"></i>
+          <button onclick="exportCSV()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-stone-200 text-xs font-semibold rounded-2xl border border-white/20 transition flex items-center space-x-2">
+            <i class="fa-solid fa-file-csv text-orange-400"></i>
             <span>Export CSV</span>
           </button>
-          <button onclick="openTestEmailModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center space-x-2">
+          <button onclick="openTestEmailModal()" class="px-4 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-2xl shadow-md transition flex items-center space-x-2">
             <i class="fa-solid fa-paper-plane"></i>
             <span>Test Parent Email</span>
           </button>
         </div>
       </div>
 
-      <!-- KPI Overview Cards -->
+      <!-- KPI Overview Cards in White and Light Orange -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-slate-500 text-[11px] font-semibold uppercase">Total Complaints</div>
-          <div id="kpi-total" class="text-2xl font-black text-slate-900 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-stone-500 text-[11px] font-semibold uppercase">Total Complaints</div>
+          <div id="kpi-total" class="text-2xl font-black text-stone-900 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-blue-500 text-[11px] font-semibold uppercase">Open & Under Review</div>
-          <div id="kpi-open" class="text-2xl font-black text-blue-600 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-amber-500 text-[11px] font-semibold uppercase">Open & Under Review</div>
+          <div id="kpi-open" class="text-2xl font-black text-amber-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-          <div class="text-amber-500 text-[11px] font-semibold uppercase">In Progress</div>
-          <div id="kpi-progress" class="text-2xl font-black text-amber-600 mt-1">0</div>
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
+          <div class="text-orange-500 text-[11px] font-semibold uppercase">In Progress</div>
+          <div id="kpi-progress" class="text-2xl font-black text-orange-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="bg-white p-4 rounded-3xl border border-orange-100 shadow-xs">
           <div class="text-emerald-500 text-[11px] font-semibold uppercase">Resolved</div>
           <div id="kpi-resolved" class="text-2xl font-black text-emerald-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-red-200 shadow-xs bg-red-50/30">
+        <div class="bg-white p-4 rounded-3xl border border-red-200 shadow-xs bg-red-50/30">
           <div class="text-red-600 text-[11px] font-semibold uppercase">Emergency</div>
           <div id="kpi-emergency" class="text-2xl font-black text-red-600 mt-1">0</div>
         </div>
-        <div class="bg-white p-4 rounded-2xl border border-orange-200 shadow-xs bg-orange-50/30">
+        <div class="bg-white p-4 rounded-3xl border border-orange-200 shadow-xs bg-orange-50/50">
           <div class="text-orange-600 text-[11px] font-semibold uppercase">Overdue SLA</div>
           <div id="kpi-overdue" class="text-2xl font-black text-orange-600 mt-1">0</div>
         </div>
@@ -399,50 +402,53 @@
       <!-- Interactive Charts Row -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Category Distribution Chart -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Complaints by Category</h3>
+        <div class="bg-white p-5 rounded-3xl border border-orange-100 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-700 mb-4">Complaints by Category</h3>
           <div class="h-56 relative flex items-center justify-center">
             <canvas id="chart-categories"></canvas>
           </div>
         </div>
 
         <!-- Status Distribution Chart -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Status Distribution</h3>
+        <div class="bg-white p-5 rounded-3xl border border-orange-100 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-700 mb-4">Status Distribution</h3>
           <div class="h-56 relative flex items-center justify-center">
             <canvas id="chart-status"></canvas>
           </div>
         </div>
 
         <!-- Department Resolution Workload -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4">Department Workload</h3>
+        <div class="bg-white p-5 rounded-3xl border border-orange-100 shadow-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-700 mb-4">Department Workload</h3>
           <div class="h-56 relative flex items-center justify-center">
             <canvas id="chart-departments"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- Navigation Tabs: Complaints vs Outbox vs Routing -->
-      <div class="border-b border-slate-200 flex space-x-6">
-        <button onclick="switchAdminTab('complaints')" id="tab-btn-complaints" class="admin-tab-btn pb-3 text-xs font-bold text-blue-600 border-b-2 border-blue-600 transition">
+      <!-- Navigation Tabs: Complaints vs Outbox vs Routing vs Email Settings -->
+      <div class="border-b border-orange-100 flex flex-wrap gap-4">
+        <button onclick="switchAdminTab('complaints')" id="tab-btn-complaints" class="admin-tab-btn pb-3 text-xs font-bold text-orange-600 border-b-2 border-orange-500 transition">
           <i class="fa-solid fa-list-check mr-1.5"></i>All Campus Complaints
         </button>
-        <button onclick="switchAdminTab('outbox')" id="tab-btn-outbox" class="admin-tab-btn pb-3 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+        <button onclick="switchAdminTab('outbox')" id="tab-btn-outbox" class="admin-tab-btn pb-3 text-xs font-semibold text-stone-500 hover:text-stone-800 transition">
           <i class="fa-solid fa-envelope mr-1.5"></i>Email Outbox & Delivery State (<span id="outbox-email-label">anilanji22515@gmail.com</span>)
         </button>
-        <button onclick="switchAdminTab('routing')" id="tab-btn-routing" class="admin-tab-btn pb-3 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+        <button onclick="switchAdminTab('email-settings')" id="tab-btn-email-settings" class="admin-tab-btn pb-3 text-xs font-semibold text-stone-500 hover:text-stone-800 transition">
+          <i class="fa-solid fa-gear mr-1.5"></i>Email & SMTP Configuration
+        </button>
+        <button onclick="switchAdminTab('routing')" id="tab-btn-routing" class="admin-tab-btn pb-3 text-xs font-semibold text-stone-500 hover:text-stone-800 transition">
           <i class="fa-solid fa-diagram-project mr-1.5"></i>Department Routing Rules (16 Categories)
         </button>
       </div>
 
       <!-- Tab Content: Complaints List -->
       <div id="admin-tab-complaints" class="space-y-4">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-white rounded-3xl border border-orange-100 shadow-xs overflow-hidden">
+          <div class="p-4 border-b border-orange-100 flex flex-wrap items-center justify-between gap-4 bg-orange-50/20">
             <div class="flex items-center space-x-2">
-              <span class="text-xs font-bold text-slate-700">Filter:</span>
-              <select id="filter-admin-status" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5">
+              <span class="text-xs font-bold text-stone-700">Filter:</span>
+              <select id="filter-admin-status" onchange="loadComplaints()" class="text-xs bg-white border border-orange-200 rounded-xl px-2.5 py-1.5">
                 <option value="">All Statuses</option>
                 <option value="SUBMITTED">Submitted</option>
                 <option value="UNDER_REVIEW">Under Review</option>
@@ -451,7 +457,7 @@
                 <option value="RESOLVED">Resolved</option>
                 <option value="CLOSED">Closed</option>
               </select>
-              <select id="filter-admin-priority" onchange="loadComplaints()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5">
+              <select id="filter-admin-priority" onchange="loadComplaints()" class="text-xs bg-white border border-orange-200 rounded-xl px-2.5 py-1.5">
                 <option value="">All Priorities</option>
                 <option value="EMERGENCY">Emergency</option>
                 <option value="HIGH">High</option>
@@ -461,14 +467,14 @@
             </div>
 
             <div class="relative">
-              <input type="text" id="filter-admin-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search all complaints..." class="text-xs bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 w-60">
-              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
+              <input type="text" id="filter-admin-search" oninput="debounce(loadComplaints, 300)()" placeholder="Search all complaints..." class="text-xs bg-white border border-orange-200 rounded-xl pl-8 pr-3 py-1.5 w-60">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-stone-400 text-xs"></i>
             </div>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <thead class="bg-orange-50/50 text-stone-500 uppercase font-semibold border-b border-orange-100">
                 <tr>
                   <th class="px-5 py-3">ID & Priority</th>
                   <th class="px-5 py-3">Title & Student</th>
@@ -479,7 +485,7 @@
                   <th class="px-5 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody id="admin-complaints-tbody" class="divide-y divide-slate-100">
+              <tbody id="admin-complaints-tbody" class="divide-y divide-orange-50">
                 <!-- Dynamically Populated -->
               </tbody>
             </table>
@@ -489,20 +495,20 @@
 
       <!-- Tab Content: Outbox & Delivery State -->
       <div id="admin-tab-outbox" class="hidden space-y-4">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+        <div class="bg-white rounded-3xl border border-orange-100 shadow-xs overflow-hidden">
+          <div class="p-4 bg-orange-50/40 border-b border-orange-100 flex justify-between items-center">
             <div>
-              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Automated Notification Audit Outbox</h4>
-              <p class="text-[11px] text-slate-500">Every complaint submission automatically triggers a parent notification record to <strong>anilanji22515@gmail.com</strong>.</p>
+              <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wider">Automated Notification Audit Outbox</h4>
+              <p class="text-[11px] text-stone-500">Every complaint submission automatically triggers a parent notification record to <strong>anilanji22515@gmail.com</strong>.</p>
             </div>
-            <button onclick="loadOutbox()" class="text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition">
+            <button onclick="loadOutbox()" class="text-xs px-3 py-1.5 bg-white border border-orange-200 text-orange-700 rounded-xl hover:bg-orange-50 transition font-semibold">
               <i class="fa-solid fa-rotate-right mr-1"></i>Refresh Logs
             </button>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <thead class="bg-orange-50/50 text-stone-500 uppercase font-semibold border-b border-orange-100">
                 <tr>
                   <th class="px-4 py-3">Outbox ID</th>
                   <th class="px-4 py-3">Complaint Ref</th>
@@ -514,7 +520,7 @@
                   <th class="px-4 py-3 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody id="outbox-tbody" class="divide-y divide-slate-100">
+              <tbody id="outbox-tbody" class="divide-y divide-orange-50">
                 <!-- Dynamically Populated -->
               </tbody>
             </table>
@@ -522,17 +528,88 @@
         </div>
       </div>
 
+      <!-- Tab Content: Email & SMTP Configuration -->
+      <div id="admin-tab-email-settings" class="hidden space-y-4">
+        <div class="bg-white rounded-3xl border border-orange-100 shadow-xs p-6 max-w-3xl space-y-5">
+          <div class="border-b border-orange-100 pb-3">
+            <h4 class="text-sm font-bold text-stone-900 flex items-center space-x-2">
+              <i class="fa-solid fa-envelope-open-text text-orange-500"></i>
+              <span>Parent Notification & SMTP Delivery Settings</span>
+            </h4>
+            <p class="text-xs text-stone-500 mt-0.5">Configure live email credentials so problem notifications are sent directly to the parent email address.</p>
+          </div>
+
+          <form id="form-email-settings" onsubmit="saveEmailSettings(event)" class="space-y-4 text-xs">
+            
+            <div class="p-3.5 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-between">
+              <div>
+                <span class="font-bold text-stone-800">Target Parent / Guardian Notification Email:</span>
+                <p class="text-[11px] text-stone-500">Fixed recipient mandated by the project specification.</p>
+              </div>
+              <input type="email" id="setting-parent-email" value="anilanji22515@gmail.com" required class="font-mono text-xs font-bold text-orange-700 bg-white border border-orange-300 rounded-xl px-3 py-1.5 w-64">
+            </div>
+
+            <div class="flex items-center space-x-3 p-3 rounded-2xl border border-stone-200 bg-stone-50">
+              <input type="checkbox" id="setting-email-enabled" class="rounded text-orange-600 w-4 h-4">
+              <div>
+                <label for="setting-email-enabled" class="font-bold text-stone-800 cursor-pointer">Enable Live SMTP Email Dispatch</label>
+                <p class="text-[11px] text-stone-500">When enabled, submissions connect to your mail server and send real emails. When disabled, emails are recorded in the simulated outbox.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-stone-700 uppercase mb-1">SMTP Host Server</label>
+                <input type="text" id="setting-smtp-host" placeholder="smtp.gmail.com" class="w-full text-xs rounded-xl border border-stone-300 p-2.5 bg-white">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 uppercase mb-1">SMTP Port</label>
+                <input type="number" id="setting-smtp-port" placeholder="587" class="w-full text-xs rounded-xl border border-stone-300 p-2.5 bg-white">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-stone-700 uppercase mb-1">SMTP Username / Email</label>
+                <input type="text" id="setting-smtp-user" placeholder="your-college-email@gmail.com" class="w-full text-xs rounded-xl border border-stone-300 p-2.5 bg-white">
+              </div>
+              <div>
+                <label class="block font-bold text-stone-700 uppercase mb-1">SMTP App Password</label>
+                <input type="password" id="setting-smtp-password" placeholder="16-character app password" class="w-full text-xs rounded-xl border border-stone-300 p-2.5 bg-white">
+                <p class="text-[10px] text-stone-400 mt-0.5">For Gmail, use a 16-character Google Account App Password.</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-stone-700 uppercase mb-1">Sender Email ("From" Address)</label>
+              <input type="text" id="setting-email-from" placeholder="campuscare-noreply@college.edu" class="w-full text-xs rounded-xl border border-stone-300 p-2.5 bg-white">
+            </div>
+
+            <div class="pt-3 border-t border-orange-100 flex justify-between items-center">
+              <button type="button" onclick="sendDiagnosticEmail()" class="px-4 py-2 bg-white text-orange-700 border border-orange-300 hover:bg-orange-50 font-bold rounded-2xl shadow-xs transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+                <span>Send Test Diagnostic Email</span>
+              </button>
+              
+              <button type="submit" class="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-md shadow-orange-500/20 transition">
+                Save Email Configuration
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- Tab Content: Routing Rules -->
       <div id="admin-tab-routing" class="hidden space-y-4">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <div class="p-4 bg-slate-50 border-b border-slate-200">
-            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">16 Standard Problem Categories & Department Mappings</h4>
-            <p class="text-[11px] text-slate-500">When a student files a complaint under any category, it is automatically routed to the responsible maintenance department queue.</p>
+        <div class="bg-white rounded-3xl border border-orange-100 shadow-xs overflow-hidden">
+          <div class="p-4 bg-orange-50/40 border-b border-orange-100">
+            <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wider">16 Standard Problem Categories & Department Mappings</h4>
+            <p class="text-[11px] text-stone-500">When a student files a complaint under any category, it is automatically routed to the responsible maintenance department queue.</p>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+              <thead class="bg-orange-50/50 text-stone-500 uppercase font-semibold border-b border-orange-100">
                 <tr>
                   <th class="px-5 py-3">Category ID</th>
                   <th class="px-5 py-3">Category Name</th>
@@ -541,7 +618,7 @@
                   <th class="px-5 py-3">Status</th>
                 </tr>
               </thead>
-              <tbody id="routing-tbody" class="divide-y divide-slate-100">
+              <tbody id="routing-tbody" class="divide-y divide-orange-50">
                 <!-- Dynamically Populated from metadata -->
               </tbody>
             </table>
@@ -556,15 +633,15 @@
   <!-- ==================== MODALS ==================== -->
 
   <!-- 1. COMPLAINT SUBMISSION MODAL -->
-  <div id="modal-new-complaint" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8">
+  <div id="modal-new-complaint" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-orange-100 overflow-hidden my-8">
       
-      <div class="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex justify-between items-center">
+      <div class="p-5 bg-gradient-to-r from-orange-500 to-amber-500 text-white flex justify-between items-center">
         <div class="flex items-center space-x-2">
           <i class="fa-solid fa-circle-exclamation text-xl"></i>
           <div>
             <h3 class="text-base font-bold">Report a Campus Problem</h3>
-            <p class="text-xs text-blue-100">Fill in the details below. Our routing engine will assign the responsible department.</p>
+            <p class="text-xs text-orange-100">Fill in the details below. Our routing engine will assign the responsible department.</p>
           </div>
         </div>
         <button onclick="closeComplaintModal()" class="text-white/80 hover:text-white p-1 text-lg">
@@ -576,23 +653,23 @@
         
         <!-- Title -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Complaint Title *</label>
-          <input type="text" id="cmp-title" required minlength="5" maxlength="120" placeholder="e.g. Water leakage near classroom 204 ceiling" class="w-full text-xs rounded-xl border border-slate-300 px-3.5 py-2.5 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
-          <p class="text-[10px] text-slate-400 mt-0.5">5 to 120 characters describing the issue concisely.</p>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Complaint Title *</label>
+          <input type="text" id="cmp-title" required minlength="5" maxlength="120" placeholder="e.g. Water leakage near classroom 204 ceiling" class="w-full text-xs rounded-2xl border border-orange-200 px-3.5 py-2.5 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none">
+          <p class="text-[10px] text-stone-400 mt-0.5">5 to 120 characters describing the issue concisely.</p>
         </div>
 
         <!-- Category & Auto-Routing Info -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category *</label>
-            <select id="cmp-category" required onchange="onCategorySelectChange()" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:border-blue-500">
+            <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Category *</label>
+            <select id="cmp-category" required onchange="onCategorySelectChange()" class="w-full text-xs rounded-2xl border border-orange-200 px-3 py-2.5 outline-none focus:border-orange-500">
               <option value="">Select Problem Category</option>
               <!-- Filled via JS -->
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Priority Level *</label>
-            <select id="cmp-priority" required onchange="onPriorityChange()" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 outline-none font-semibold">
+            <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Priority Level *</label>
+            <select id="cmp-priority" required onchange="onPriorityChange()" class="w-full text-xs rounded-2xl border border-orange-200 px-3 py-2.5 outline-none font-semibold">
               <option value="LOW">Low (Minor issue, 7 days SLA)</option>
               <option value="MEDIUM" selected>Medium (Standard use issue, 3 days SLA)</option>
               <option value="HIGH">High (Serious hazard/disruption, 24h SLA)</option>
@@ -602,16 +679,16 @@
         </div>
 
         <!-- Routing Target Pill -->
-        <div id="routing-preview-box" class="hidden p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 flex items-center justify-between">
+        <div id="routing-preview-box" class="hidden p-3 rounded-2xl bg-orange-50 border border-orange-200 text-xs text-orange-900 flex items-center justify-between">
           <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-arrow-turn-down text-blue-500"></i>
+            <i class="fa-solid fa-arrow-turn-down text-orange-500"></i>
             <span>Auto-Routing To: <strong id="routing-dept-name">Plumbing and Water</strong></span>
           </div>
-          <span class="text-[10px] bg-blue-200 text-blue-900 px-2 py-0.5 rounded-full font-bold">Auto-Routed</span>
+          <span class="text-[10px] bg-orange-200 text-orange-900 px-2 py-0.5 rounded-full font-bold">Auto-Routed</span>
         </div>
 
         <!-- Emergency Advisory Banner if EMERGENCY selected -->
-        <div id="emergency-form-warning" class="hidden p-3.5 rounded-xl bg-red-50 border border-red-300 text-xs text-red-900 space-y-1">
+        <div id="emergency-form-warning" class="hidden p-3.5 rounded-2xl bg-red-50 border border-red-300 text-xs text-red-900 space-y-1">
           <div class="flex items-center space-x-2 font-bold text-red-700">
             <i class="fa-solid fa-triangle-exclamation text-base"></i>
             <span>EMERGENCY SELECTION ADVISORY</span>
@@ -622,19 +699,19 @@
         </div>
 
         <!-- Campus Location Picker -->
-        <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 space-y-3">
+        <div class="border border-orange-200 rounded-3xl p-4 bg-orange-50/30 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-700 uppercase">Exact Campus Location *</span>
-            <button type="button" onclick="openCampusMapModal()" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg text-[11px] font-bold flex items-center space-x-1.5 transition">
-              <i class="fa-solid fa-map-location-dot text-blue-600"></i>
+            <span class="text-xs font-bold text-stone-700 uppercase">Exact Campus Location *</span>
+            <button type="button" onclick="openCampusMapModal()" class="px-2.5 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-xl text-[11px] font-bold flex items-center space-x-1.5 transition">
+              <i class="fa-solid fa-map-location-dot text-orange-600"></i>
               <span>Open Campus Map</span>
             </button>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <div>
-              <label class="text-[10px] font-semibold text-slate-500">Building *</label>
-              <select id="cmp-building" required class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+              <label class="text-[10px] font-semibold text-stone-500">Building *</label>
+              <select id="cmp-building" required class="w-full text-xs rounded-xl border border-orange-200 px-2.5 py-1.5 bg-white">
                 <option value="Main Block">Main Block</option>
                 <option value="Engineering Block">Engineering Block</option>
                 <option value="Central Library">Central Library</option>
@@ -646,27 +723,27 @@
               </select>
             </div>
             <div>
-              <label class="text-[10px] font-semibold text-slate-500">Block / Wing</label>
-              <input type="text" id="cmp-block" placeholder="e.g. Block B" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+              <label class="text-[10px] font-semibold text-stone-500">Block / Wing</label>
+              <input type="text" id="cmp-block" placeholder="e.g. Block B" class="w-full text-xs rounded-xl border border-orange-200 px-2.5 py-1.5 bg-white">
             </div>
             <div>
-              <label class="text-[10px] font-semibold text-slate-500">Floor</label>
-              <input type="text" id="cmp-floor" placeholder="e.g. 2nd Floor" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+              <label class="text-[10px] font-semibold text-stone-500">Floor</label>
+              <input type="text" id="cmp-floor" placeholder="e.g. 2nd Floor" class="w-full text-xs rounded-xl border border-orange-200 px-2.5 py-1.5 bg-white">
             </div>
             <div>
-              <label class="text-[10px] font-semibold text-slate-500">Room / Area</label>
-              <input type="text" id="cmp-room" placeholder="e.g. Room 204" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+              <label class="text-[10px] font-semibold text-stone-500">Room / Area</label>
+              <input type="text" id="cmp-room" placeholder="e.g. Room 204" class="w-full text-xs rounded-xl border border-orange-200 px-2.5 py-1.5 bg-white">
             </div>
           </div>
 
           <div>
-            <label class="text-[10px] font-semibold text-slate-500">Nearby Landmark (Optional)</label>
-            <input type="text" id="cmp-landmark" placeholder="e.g. Near Staircase 2 / Opposite Water Dispenser" class="w-full text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white">
+            <label class="text-[10px] font-semibold text-stone-500">Nearby Landmark (Optional)</label>
+            <input type="text" id="cmp-landmark" placeholder="e.g. Near Staircase 2 / Opposite Water Dispenser" class="w-full text-xs rounded-xl border border-orange-200 px-2.5 py-1.5 bg-white">
           </div>
         </div>
 
         <!-- Duplicate Warning Indicator -->
-        <div id="duplicate-warning-box" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-900 space-y-1">
+        <div id="duplicate-warning-box" class="hidden p-3 rounded-2xl bg-amber-50 border border-amber-300 text-xs text-amber-900 space-y-1">
           <div class="flex items-center space-x-1.5 font-bold text-amber-800">
             <i class="fa-solid fa-triangle-exclamation"></i>
             <span>Possible Duplicate Complaints Detected in this Location:</span>
@@ -678,45 +755,45 @@
         <!-- Detailed Description -->
         <div>
           <div class="flex justify-between items-center mb-1">
-            <label class="text-xs font-bold text-slate-700 uppercase">Detailed Description *</label>
-            <span class="text-[10px] text-slate-400">Explain: What happened? When? Is there danger?</span>
+            <label class="text-xs font-bold text-stone-700 uppercase">Detailed Description *</label>
+            <span class="text-[10px] text-stone-400">Explain: What happened? When? Is there danger?</span>
           </div>
-          <textarea id="cmp-desc" required minlength="15" rows="3" placeholder="Describe the problem clearly..." class="w-full text-xs rounded-xl border border-slate-300 p-3 outline-none focus:border-blue-500"></textarea>
+          <textarea id="cmp-desc" required minlength="15" rows="3" placeholder="Describe the problem clearly..." class="w-full text-xs rounded-2xl border border-orange-200 p-3 outline-none focus:border-orange-500"></textarea>
         </div>
 
         <!-- Optional Proof Upload -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Attach Photo / Video Proof (Optional)</label>
-          <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-4 text-center cursor-pointer bg-slate-50 transition" onclick="document.getElementById('cmp-file').click()">
-            <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 mb-1"></i>
-            <p class="text-xs font-semibold text-slate-700" id="file-label">Click to upload JPG, PNG, or MP4 (Max 16MB)</p>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Attach Photo / Video Proof (Optional)</label>
+          <div class="border-2 border-dashed border-orange-200 hover:border-orange-400 rounded-2xl p-4 text-center cursor-pointer bg-orange-50/20 transition" onclick="document.getElementById('cmp-file').click()">
+            <i class="fa-solid fa-cloud-arrow-up text-2xl text-orange-400 mb-1"></i>
+            <p class="text-xs font-semibold text-stone-700" id="file-label">Click to upload JPG, PNG, or MP4 (Max 16MB)</p>
             <input type="file" id="cmp-file" accept="image/*,video/mp4" class="hidden" onchange="handleFileSelected(this)">
           </div>
         </div>
 
         <!-- Anonymous Option & Parent Consent Checkbox -->
-        <div class="space-y-2 pt-2 border-t border-slate-200">
-          <label class="flex items-start space-x-2 text-xs text-slate-700 cursor-pointer">
-            <input type="checkbox" id="cmp-anonymous" class="rounded text-blue-600 mt-0.5">
+        <div class="space-y-2 pt-2 border-t border-orange-100">
+          <label class="flex items-start space-x-2 text-xs text-stone-700 cursor-pointer">
+            <input type="checkbox" id="cmp-anonymous" class="rounded text-orange-600 mt-0.5">
             <span>
               <strong>Report Anonymously:</strong> Hide my name and roll number from department technicians. (Central administrators retain link strictly for abuse prevention).
             </span>
           </label>
 
-          <label class="flex items-start space-x-2 text-xs text-slate-700 cursor-pointer bg-blue-50/50 p-2.5 rounded-xl border border-blue-100">
-            <input type="checkbox" id="cmp-consent" required checked class="rounded text-blue-600 mt-0.5">
+          <label class="flex items-start space-x-2 text-xs text-stone-700 cursor-pointer bg-orange-50/60 p-2.5 rounded-2xl border border-orange-200">
+            <input type="checkbox" id="cmp-consent" required checked class="rounded text-orange-600 mt-0.5">
             <span>
-              <strong>Notification Consent:</strong> I acknowledge that an automated submission notification will be dispatched to the verified central parent/guardian email address (<code>anilanji22515@gmail.com</code>).
+              <strong>Parent Notification Consent:</strong> I acknowledge that an automated submission notification will be dispatched to the verified parent/guardian email address (<code>anilanji22515@gmail.com</code>).
             </span>
           </label>
         </div>
 
         <!-- Submit & Cancel Buttons -->
-        <div class="pt-4 flex items-center justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeComplaintModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">
+        <div class="pt-4 flex items-center justify-end space-x-3 border-t border-orange-100">
+          <button type="button" onclick="closeComplaintModal()" class="px-4 py-2 text-xs font-semibold text-stone-600 hover:bg-orange-50 rounded-xl transition">
             Cancel
           </button>
-          <button type="submit" id="btn-submit-complaint" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center space-x-2">
+          <button type="submit" id="btn-submit-complaint" class="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-2xl shadow-md shadow-orange-500/20 transition flex items-center space-x-2">
             <span>Confirm & Submit Report</span>
             <i class="fa-solid fa-paper-plane text-xs"></i>
           </button>
@@ -727,13 +804,13 @@
   </div>
 
   <!-- 2. COMPLAINT DETAILS & TIMELINE MODAL -->
-  <div id="modal-complaint-detail" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8">
+  <div id="modal-complaint-detail" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-orange-100 overflow-hidden my-8">
       
-      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+      <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <span id="detail-code-badge" class="font-mono text-xs font-black bg-blue-600 px-3 py-1 rounded-lg">CMP-2026-000001</span>
-          <span id="detail-status-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-800">Status</span>
+          <span id="detail-code-badge" class="font-mono text-xs font-black bg-orange-500 px-3 py-1 rounded-xl">CMP-2026-000001</span>
+          <span id="detail-status-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-stone-800">Status</span>
         </div>
         <button onclick="closeDetailModal()" class="text-white/80 hover:text-white p-1 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -744,64 +821,64 @@
         
         <!-- Header Info -->
         <div>
-          <h3 id="detail-title" class="text-lg font-bold text-slate-900">Title</h3>
-          <p id="detail-desc" class="text-slate-600 mt-1 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200"></p>
+          <h3 id="detail-title" class="text-lg font-bold text-stone-900">Title</h3>
+          <p id="detail-desc" class="text-stone-600 mt-1 leading-relaxed bg-orange-50/30 p-3 rounded-2xl border border-orange-100"></p>
         </div>
 
         <!-- Meta Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-orange-50/40 p-3.5 rounded-3xl border border-orange-100">
           <div>
-            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Category</span>
-            <span id="detail-category" class="font-bold text-slate-800">Category</span>
+            <span class="text-[10px] text-stone-400 font-semibold block uppercase">Category</span>
+            <span id="detail-category" class="font-bold text-stone-800">Category</span>
           </div>
           <div>
-            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Priority</span>
+            <span class="text-[10px] text-stone-400 font-semibold block uppercase">Priority</span>
             <span id="detail-priority" class="font-bold">Priority</span>
           </div>
           <div>
-            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Assigned Dept</span>
-            <span id="detail-dept" class="font-bold text-slate-800">Department</span>
+            <span class="text-[10px] text-stone-400 font-semibold block uppercase">Assigned Dept</span>
+            <span id="detail-dept" class="font-bold text-stone-800">Department</span>
           </div>
           <div>
-            <span class="text-[10px] text-slate-400 font-semibold block uppercase">Reporter</span>
-            <span id="detail-student" class="font-bold text-slate-800">Student</span>
+            <span class="text-[10px] text-stone-400 font-semibold block uppercase">Reporter</span>
+            <span id="detail-student" class="font-bold text-stone-800">Student</span>
           </div>
         </div>
 
         <!-- Campus Location Details -->
         <div>
-          <span class="text-[10px] text-slate-400 font-semibold block uppercase mb-1">Campus Location</span>
-          <div class="p-2.5 rounded-xl bg-slate-100/80 font-medium text-slate-700 flex items-center space-x-2">
-            <i class="fa-solid fa-location-dot text-red-500"></i>
+          <span class="text-[10px] text-stone-400 font-semibold block uppercase mb-1">Campus Location</span>
+          <div class="p-2.5 rounded-2xl bg-orange-50/60 border border-orange-100 font-medium text-stone-700 flex items-center space-x-2">
+            <i class="fa-solid fa-location-dot text-orange-500"></i>
             <span id="detail-location">Location details</span>
           </div>
         </div>
 
         <!-- Master Incident Link (if duplicate) -->
-        <div id="detail-duplicate-banner" class="hidden p-3 rounded-xl bg-purple-50 border border-purple-200 text-xs text-purple-900 font-semibold flex items-center space-x-2">
-          <i class="fa-solid fa-link text-purple-600"></i>
-          <span>Linked as duplicate to Master Complaint: <strong id="detail-master-code" class="font-mono text-purple-700"></strong> (<span id="detail-master-title"></span>)</span>
+        <div id="detail-duplicate-banner" class="hidden p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-semibold flex items-center space-x-2">
+          <i class="fa-solid fa-link text-amber-600"></i>
+          <span>Linked as duplicate to Master Complaint: <strong id="detail-master-code" class="font-mono text-amber-700"></strong> (<span id="detail-master-title"></span>)</span>
         </div>
 
         <!-- Attached Proof Evidence -->
         <div id="detail-attachments-box" class="hidden space-y-1.5">
-          <span class="text-[10px] text-slate-400 font-semibold block uppercase">Attached Photo/Video Evidence</span>
+          <span class="text-[10px] text-stone-400 font-semibold block uppercase">Attached Photo/Video Evidence</span>
           <div id="detail-attachments-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
         </div>
 
         <!-- Visual Chronological Status Timeline -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3 flex items-center justify-between">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-800 mb-3 flex items-center justify-between">
             <span>Status Timeline & Lifecycle Audit</span>
-            <span class="text-[10px] text-slate-400 font-normal">UTC Campus Log</span>
+            <span class="text-[10px] text-stone-400 font-normal">UTC Campus Log</span>
           </h4>
-          <div id="timeline-container" class="space-y-3 relative pl-6 border-l-2 border-blue-200 ml-2">
+          <div id="timeline-container" class="space-y-3 relative pl-6 border-l-2 border-orange-200 ml-2">
             <!-- Populated via JS -->
           </div>
         </div>
 
         <!-- Resolution Details (if marked resolved) -->
-        <div id="detail-resolution-box" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+        <div id="detail-resolution-box" class="hidden p-4 rounded-3xl bg-emerald-50 border border-emerald-200 space-y-2">
           <div class="flex items-center space-x-2 text-emerald-800 font-bold">
             <i class="fa-solid fa-circle-check text-base"></i>
             <span>Department Resolution Proof & Summary</span>
@@ -811,15 +888,15 @@
           <div class="text-[10px] text-emerald-600 pt-1" id="detail-resolution-meta"></div>
         </div>
 
-        <!-- Post-Resolution Student Feedback Form (if student & resolved/closed) -->
-        <div id="detail-feedback-section" class="hidden border border-slate-200 p-4 rounded-2xl bg-blue-50/30 space-y-3">
-          <h4 class="text-xs font-bold text-slate-900 flex items-center space-x-1.5">
+        <!-- Post-Resolution Student Feedback Form -->
+        <div id="detail-feedback-section" class="hidden border border-orange-200 p-4 rounded-3xl bg-orange-50/30 space-y-3">
+          <h4 class="text-xs font-bold text-stone-900 flex items-center space-x-1.5">
             <i class="fa-solid fa-star text-amber-500"></i>
             <span>Student Resolution Feedback</span>
           </h4>
           
           <div id="feedback-form-content">
-            <p class="text-xs text-slate-600 mb-2">Has your complaint been satisfactorily resolved by the department?</p>
+            <p class="text-xs text-stone-600 mb-2">Has your complaint been satisfactorily resolved by the department?</p>
             <div class="flex items-center space-x-4 mb-3">
               <label class="flex items-center space-x-1.5 cursor-pointer font-semibold text-emerald-700">
                 <input type="radio" name="fb_fixed" value="1" checked class="text-emerald-600">
@@ -832,8 +909,8 @@
             </div>
 
             <div class="mb-3">
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Rating (1 to 5 Stars):</label>
-              <div class="flex space-x-2 text-lg text-slate-300 cursor-pointer" id="star-rating-box">
+              <label class="block text-[11px] font-semibold text-stone-600 mb-1">Rating (1 to 5 Stars):</label>
+              <div class="flex space-x-2 text-lg text-stone-300 cursor-pointer" id="star-rating-box">
                 <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(1)"></i>
                 <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(2)"></i>
                 <i class="fa-solid fa-star text-amber-400" onclick="setFeedbackRating(3)"></i>
@@ -843,26 +920,26 @@
             </div>
 
             <div class="mb-3">
-              <textarea id="fb-comment" rows="2" placeholder="Optional comments on resolution quality..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5 outline-none"></textarea>
+              <textarea id="fb-comment" rows="2" placeholder="Optional comments on resolution quality..." class="w-full text-xs rounded-2xl border border-orange-200 p-2.5 outline-none"></textarea>
             </div>
 
-            <button onclick="submitStudentFeedback()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition">
+            <button onclick="submitStudentFeedback()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl shadow-xs transition">
               Submit Feedback
             </button>
           </div>
 
           <div id="feedback-display-content" class="hidden text-xs space-y-1">
             <div class="flex items-center space-x-2">
-              <span class="font-bold text-slate-800">Student Rating:</span>
+              <span class="font-bold text-stone-800">Student Rating:</span>
               <span id="fb-stars-display" class="text-amber-500 font-bold">★★★★★</span>
             </div>
-            <p id="fb-comment-display" class="text-slate-600 italic bg-white p-2.5 rounded-xl border border-slate-200"></p>
+            <p id="fb-comment-display" class="text-stone-600 italic bg-white p-2.5 rounded-2xl border border-orange-100"></p>
           </div>
         </div>
 
         <!-- Reopen Button if student or admin -->
         <div id="detail-reopen-box" class="hidden pt-2 flex justify-end">
-          <button onclick="promptReopen()" class="px-3.5 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-xl font-bold text-xs border border-rose-200 transition flex items-center space-x-1.5">
+          <button onclick="promptReopen()" class="px-3.5 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-2xl font-bold text-xs border border-rose-200 transition flex items-center space-x-1.5">
             <i class="fa-solid fa-rotate-left"></i>
             <span>Request to Reopen Complaint</span>
           </button>
@@ -870,8 +947,8 @@
 
       </div>
 
-      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-        <button onclick="closeDetailModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-xs transition">
+      <div class="p-4 bg-orange-50/30 border-t border-orange-100 flex justify-end">
+        <button onclick="closeDetailModal()" class="px-5 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold rounded-2xl text-xs transition">
           Close
         </button>
       </div>
@@ -880,9 +957,9 @@
   </div>
 
   <!-- 3. UPDATE STATUS & WORK NOTE MODAL (For Staff / Admin) -->
-  <div id="modal-update-status" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+  <div id="modal-update-status" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
         <h3 class="text-sm font-bold">Update Complaint Workflow Status</h3>
         <button onclick="closeStatusModal()" class="text-white/80 hover:text-white p-1 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -893,8 +970,8 @@
         <input type="hidden" id="status-complaint-id">
         
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">New Workflow Status *</label>
-          <select id="status-select" required class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-semibold">
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">New Workflow Status *</label>
+          <select id="status-select" required class="w-full text-xs rounded-2xl border border-stone-300 px-3 py-2.5 font-semibold">
             <option value="UNDER_REVIEW">UNDER_REVIEW - Admin/Department checking</option>
             <option value="ASSIGNED">ASSIGNED - Assigned to technician</option>
             <option value="IN_PROGRESS">IN_PROGRESS - Work has started</option>
@@ -906,27 +983,27 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Public Update Message *</label>
-          <input type="text" id="status-public-msg" required placeholder="Visible to student (e.g. Technician dispatched with replacement part)" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
-          <p class="text-[10px] text-slate-400 mt-0.5">This message will appear in the student's status timeline.</p>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Public Update Message *</label>
+          <input type="text" id="status-public-msg" required placeholder="Visible to student (e.g. Technician dispatched with replacement part)" class="w-full text-xs rounded-2xl border border-stone-300 p-2.5">
+          <p class="text-[10px] text-stone-400 mt-0.5">This message will appear in the student's status timeline.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Internal Note (Staff & Admin Only)</label>
-          <textarea id="status-internal-note" rows="2" placeholder="Private internal technical notes - NEVER shown to students..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5"></textarea>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Internal Note (Staff & Admin Only)</label>
+          <textarea id="status-internal-note" rows="2" placeholder="Private internal technical notes - NEVER shown to students..." class="w-full text-xs rounded-2xl border border-stone-300 p-2.5"></textarea>
         </div>
 
-        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs">Apply Status</button>
+        <div class="pt-3 flex justify-end space-x-3 border-t border-stone-200">
+          <button type="button" onclick="closeStatusModal()" class="px-4 py-2 text-stone-600 font-semibold hover:bg-stone-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs">Apply Status</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- 4. ADD RESOLUTION PROOF MODAL (For Staff) -->
-  <div id="modal-resolution" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+  <!-- 4. ADD RESOLUTION PROOF MODAL -->
+  <div id="modal-resolution" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
       <div class="p-5 bg-emerald-600 text-white flex justify-between items-center">
         <h3 class="text-sm font-bold flex items-center space-x-2">
           <i class="fa-solid fa-clipboard-check"></i>
@@ -941,27 +1018,27 @@
         <input type="hidden" id="res-complaint-id">
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Resolution Summary *</label>
-          <input type="text" id="res-summary" required placeholder="e.g. Replaced defective valve and tested pipeline pressure" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Resolution Summary *</label>
+          <input type="text" id="res-summary" required placeholder="e.g. Replaced defective valve and tested pipeline pressure" class="w-full text-xs rounded-2xl border border-stone-300 p-2.5">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Detailed Work Performed</label>
-          <textarea id="res-work" rows="3" placeholder="Explain technical steps taken, parts replaced, and inspection results..." class="w-full text-xs rounded-xl border border-slate-300 p-2.5"></textarea>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Detailed Work Performed</label>
+          <textarea id="res-work" rows="3" placeholder="Explain technical steps taken, parts replaced, and inspection results..." class="w-full text-xs rounded-2xl border border-stone-300 p-2.5"></textarea>
         </div>
 
-        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeResolutionModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs">Complete & Mark Resolved</button>
+        <div class="pt-3 flex justify-end space-x-3 border-t border-stone-200">
+          <button type="button" onclick="closeResolutionModal()" class="px-4 py-2 text-stone-600 font-semibold hover:bg-stone-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-xs">Complete & Mark Resolved</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- 5. REASSIGN MODAL (For Dept Head & Admin) -->
-  <div id="modal-reassign" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-indigo-600 text-white flex justify-between items-center">
+  <!-- 5. REASSIGN MODAL -->
+  <div id="modal-reassign" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
         <h3 class="text-sm font-bold">Assign Staff or Reassign Department</h3>
         <button onclick="closeReassignModal()" class="text-white/80 hover:text-white p-1 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -972,38 +1049,38 @@
         <input type="hidden" id="reassign-complaint-id">
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Responsible Department</label>
-          <select id="reassign-dept" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-medium"></select>
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Responsible Department</label>
+          <select id="reassign-dept" class="w-full text-xs rounded-2xl border border-stone-300 px-3 py-2.5 font-medium"></select>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Assign Staff Member</label>
-          <select id="reassign-staff" class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-medium">
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Assign Staff Member</label>
+          <select id="reassign-staff" class="w-full text-xs rounded-2xl border border-stone-300 px-3 py-2.5 font-medium">
             <option value="">-- Unassigned Staff Queue --</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Assignment Note</label>
-          <input type="text" id="reassign-note" placeholder="Reason or instructions for assignee" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+          <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Assignment Note</label>
+          <input type="text" id="reassign-note" placeholder="Reason or instructions for assignee" class="w-full text-xs rounded-2xl border border-stone-300 p-2.5">
         </div>
 
-        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeReassignModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-xs">Save Assignment</button>
+        <div class="pt-3 flex justify-end space-x-3 border-t border-stone-200">
+          <button type="button" onclick="closeReassignModal()" class="px-4 py-2 text-stone-600 font-semibold hover:bg-stone-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs">Save Assignment</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- 6. AUTH / SIGN IN MODAL -->
-  <div id="modal-auth" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+  <div id="modal-auth" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
       
-      <div class="p-5 bg-gradient-to-r from-blue-700 to-indigo-700 text-white flex justify-between items-center">
+      <div class="p-5 bg-gradient-to-r from-orange-500 to-amber-500 text-white flex justify-between items-center">
         <div>
           <h3 class="text-base font-bold">CampusCare Portal</h3>
-          <p class="text-xs text-blue-100">Sign in to your account</p>
+          <p class="text-xs text-orange-100">Sign in to your account</p>
         </div>
         <button onclick="closeAuthModal()" class="text-white/80 hover:text-white p-1 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -1012,22 +1089,22 @@
 
       <div class="p-6 space-y-4">
         <!-- Tab Selector: Login vs Register -->
-        <div class="flex border-b border-slate-200 text-xs font-bold">
-          <button onclick="switchAuthTab('login')" id="btn-tab-login" class="pb-2 px-4 text-blue-600 border-b-2 border-blue-600">Sign In</button>
-          <button onclick="switchAuthTab('register')" id="btn-tab-register" class="pb-2 px-4 text-slate-400 hover:text-slate-600">Student Register</button>
+        <div class="flex border-b border-orange-100 text-xs font-bold">
+          <button onclick="switchAuthTab('login')" id="btn-tab-login" class="pb-2 px-4 text-orange-600 border-b-2 border-orange-500">Sign In</button>
+          <button onclick="switchAuthTab('register')" id="btn-tab-register" class="pb-2 px-4 text-stone-400 hover:text-stone-600">Student Register</button>
         </div>
 
         <!-- Login Form -->
         <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-3.5 text-xs">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">College ID or Email</label>
-            <input type="text" id="login-identifier" required placeholder="e.g. DEMO-CSE-001 or rahul.demo@example.com" class="w-full rounded-xl border border-slate-300 p-2.5">
+            <label class="block font-semibold text-stone-700 mb-1">College ID or Email</label>
+            <input type="text" id="login-identifier" required placeholder="e.g. DEMO-CSE-001 or rahul.demo@example.com" class="w-full rounded-2xl border border-stone-300 p-2.5">
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Password</label>
-            <input type="password" id="login-password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-300 p-2.5">
+            <label class="block font-semibold text-stone-700 mb-1">Password</label>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full rounded-2xl border border-stone-300 p-2.5">
           </div>
-          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+          <button type="submit" class="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs transition">
             Sign In to Dashboard
           </button>
         </form>
@@ -1035,17 +1112,17 @@
         <!-- Register Form -->
         <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-3 text-xs">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="e.g. Anita Sharma" class="w-full rounded-xl border border-slate-300 p-2">
+            <label class="block font-semibold text-stone-700 mb-1">Full Name *</label>
+            <input type="text" id="reg-name" required placeholder="e.g. Anita Sharma" class="w-full rounded-2xl border border-stone-300 p-2">
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">College Roll ID *</label>
-              <input type="text" id="reg-college-id" required placeholder="e.g. 24CSE089" class="w-full rounded-xl border border-slate-300 p-2">
+              <label class="block font-semibold text-stone-700 mb-1">College Roll ID *</label>
+              <input type="text" id="reg-college-id" required placeholder="e.g. 24CSE089" class="w-full rounded-2xl border border-stone-300 p-2">
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Year of Study *</label>
-              <select id="reg-year" class="w-full rounded-xl border border-slate-300 p-2">
+              <label class="block font-semibold text-stone-700 mb-1">Year of Study *</label>
+              <select id="reg-year" class="w-full rounded-2xl border border-stone-300 p-2">
                 <option value="1">Year 1</option>
                 <option value="2">Year 2</option>
                 <option value="3">Year 3</option>
@@ -1054,36 +1131,36 @@
             </div>
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">College Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="anita@college.edu" class="w-full rounded-xl border border-slate-300 p-2">
+            <label class="block font-semibold text-stone-700 mb-1">College Email Address *</label>
+            <input type="email" id="reg-email" required placeholder="anita@college.edu" class="w-full rounded-2xl border border-stone-300 p-2">
           </div>
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Password *</label>
-            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-300 p-2">
+            <label class="block font-semibold text-stone-700 mb-1">Password *</label>
+            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full rounded-2xl border border-stone-300 p-2">
           </div>
-          <label class="flex items-start space-x-2 text-[11px] text-slate-600">
-            <input type="checkbox" id="reg-consent" required checked class="mt-0.5">
+          <label class="flex items-start space-x-2 text-[11px] text-stone-600">
+            <input type="checkbox" id="reg-consent" required checked class="mt-0.5 text-orange-600">
             <span>I consent to CampusCare notification policy & parent alerts.</span>
           </label>
-          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+          <button type="submit" class="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs transition">
             Create Student Account
           </button>
         </form>
 
-        <!-- Fast Demo Buttons -->
-        <div class="pt-3 border-t border-slate-200">
-          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">Fast Demo 1-Click Access</p>
+        <!-- Fast Demo Buttons in Light Orange -->
+        <div class="pt-3 border-t border-orange-100">
+          <p class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2 text-center">Fast Demo 1-Click Access</p>
           <div class="grid grid-cols-2 gap-2">
-            <button type="button" onclick="demoLogin('student')" class="p-2 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-xs font-semibold text-slate-700 transition">
+            <button type="button" onclick="demoLogin('student')" class="p-2 rounded-2xl bg-orange-50 hover:bg-orange-100 hover:text-orange-700 text-xs font-semibold text-stone-700 transition">
               👨‍🎓 Student Demo
             </button>
-            <button type="button" onclick="demoLogin('staff')" class="p-2 rounded-xl bg-slate-100 hover:bg-amber-50 hover:text-amber-600 text-xs font-semibold text-slate-700 transition">
+            <button type="button" onclick="demoLogin('staff')" class="p-2 rounded-2xl bg-amber-50 hover:bg-amber-100 hover:text-amber-700 text-xs font-semibold text-stone-700 transition">
               🔧 Staff Demo
             </button>
-            <button type="button" onclick="demoLogin('department_head')" class="p-2 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-xs font-semibold text-slate-700 transition">
+            <button type="button" onclick="demoLogin('department_head')" class="p-2 rounded-2xl bg-stone-100 hover:bg-stone-200 text-xs font-semibold text-stone-700 transition">
               👔 Dept Head Demo
             </button>
-            <button type="button" onclick="demoLogin('admin')" class="p-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-600 text-xs font-semibold text-slate-700 transition">
+            <button type="button" onclick="demoLogin('admin')" class="p-2 rounded-2xl bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 text-xs font-semibold text-stone-700 transition">
               🛡️ Admin Demo
             </button>
           </div>
@@ -1094,12 +1171,12 @@
     </div>
   </div>
 
-  <!-- 7. TEST PARENT EMAIL MODAL (For Administrator) -->
-  <div id="modal-test-email" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+  <!-- 7. TEST PARENT EMAIL MODAL -->
+  <div id="modal-test-email" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
         <h3 class="text-sm font-bold flex items-center space-x-2">
-          <i class="fa-solid fa-paper-plane text-blue-400"></i>
+          <i class="fa-solid fa-paper-plane text-orange-400"></i>
           <span>Dispatch Diagnostic Parent Notification</span>
         </h3>
         <button onclick="closeTestEmailModal()" class="text-white/80 hover:text-white p-1 text-lg">
@@ -1108,20 +1185,20 @@
       </div>
 
       <div class="p-6 space-y-4 text-xs">
-        <p class="text-slate-600">
-          This triggers a diagnostic notification dispatch from the backend to verify outbox recording and delivery telemetry.
+        <p class="text-stone-600">
+          This triggers a diagnostic notification dispatch from the backend to verify outbox recording and live delivery telemetry to <strong>anilanji22515@gmail.com</strong>.
         </p>
 
         <div>
-          <label class="block font-bold text-slate-700 uppercase mb-1">Target Recipient Email</label>
-          <input type="email" id="test-email-input" value="anilanji22515@gmail.com" class="w-full text-xs rounded-xl border border-slate-300 p-2.5 bg-slate-50 font-mono">
+          <label class="block font-bold text-stone-700 uppercase mb-1">Target Recipient Email</label>
+          <input type="email" id="test-email-input" value="anilanji22515@gmail.com" class="w-full text-xs rounded-2xl border border-orange-200 p-2.5 bg-orange-50/50 font-mono text-orange-800">
         </div>
 
-        <div id="test-email-status-box" class="hidden p-3 rounded-xl text-xs space-y-1"></div>
+        <div id="test-email-status-box" class="hidden p-3 rounded-2xl text-xs space-y-1"></div>
 
-        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeTestEmailModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Close</button>
-          <button type="button" onclick="sendDiagnosticEmail()" id="btn-send-test-email" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+        <div class="pt-3 flex justify-end space-x-3 border-t border-stone-200">
+          <button type="button" onclick="closeTestEmailModal()" class="px-4 py-2 text-stone-600 font-semibold hover:bg-stone-100 rounded-xl">Close</button>
+          <button type="button" onclick="sendDiagnosticEmail()" id="btn-send-test-email" class="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs transition">
             Dispatch Email Now
           </button>
         </div>
@@ -1130,15 +1207,15 @@
   </div>
 
   <!-- 8. INTERACTIVE CAMPUS MAP MODAL -->
-  <div id="modal-campus-map" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-gradient-to-r from-blue-700 to-indigo-700 text-white flex justify-between items-center">
+  <div id="modal-campus-map" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-gradient-to-r from-orange-500 to-amber-500 text-white flex justify-between items-center">
         <div>
           <h3 class="text-base font-bold flex items-center space-x-2">
             <i class="fa-solid fa-map-location-dot"></i>
             <span>Interactive Campus Location Map</span>
           </h3>
-          <p class="text-xs text-blue-100">Click any campus building to auto-populate your complaint location</p>
+          <p class="text-xs text-orange-100">Click any campus building to auto-populate your complaint location</p>
         </div>
         <button onclick="closeCampusMapModal()" class="text-white/80 hover:text-white p-1 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -1146,83 +1223,83 @@
       </div>
 
       <div class="p-6 space-y-4 text-xs">
-        <!-- Visual Campus Map Grid -->
+        <!-- Visual Campus Map Grid in White and Light Orange -->
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div onclick="selectMapBuilding('Main Block', 'Block A', '1st Floor', 'Room 101')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-blue-600 mb-1">
+          <div onclick="selectMapBuilding('Main Block', 'Block A', '1st Floor', 'Room 101')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-orange-600 mb-1">
               <i class="fa-solid fa-landmark text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">Admin</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-orange-100 text-orange-800">Admin</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-blue-700">Main Block</h4>
-            <p class="text-[11px] text-slate-500">Reception, Classrooms 101-205, Dean Offices</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-orange-700">Main Block</h4>
+            <p class="text-[11px] text-stone-500">Reception, Classrooms 101-205, Dean Offices</p>
           </div>
 
-          <div onclick="selectMapBuilding('Engineering Block', 'CS Wing', '1st Floor', 'Computer Lab 1')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-indigo-600 mb-1">
+          <div onclick="selectMapBuilding('Engineering Block', 'CS Wing', '1st Floor', 'Computer Lab 1')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-amber-600 mb-1">
               <i class="fa-solid fa-laptop-code text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800">Labs</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">Labs</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-indigo-700">Engineering Block</h4>
-            <p class="text-[11px] text-slate-500">CS & EC Labs, Server Room, Lecture Halls</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-amber-700">Engineering Block</h4>
+            <p class="text-[11px] text-stone-500">CS & EC Labs, Server Room, Lecture Halls</p>
           </div>
 
-          <div onclick="selectMapBuilding('Central Library', 'East Wing', 'Ground Floor', 'Main Reading Hall')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+          <div onclick="selectMapBuilding('Central Library', 'East Wing', 'Ground Floor', 'Main Reading Hall')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
             <div class="flex items-center justify-between text-emerald-600 mb-1">
               <i class="fa-solid fa-book-open-reader text-lg"></i>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Study</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-emerald-700">Central Library</h4>
-            <p class="text-[11px] text-slate-500">Reading Hall, Digital Section, Archives</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-emerald-700">Central Library</h4>
+            <p class="text-[11px] text-stone-500">Reading Hall, Digital Section, Archives</p>
           </div>
 
-          <div onclick="selectMapBuilding('Hostel A', 'Boys Block', 'Ground Floor', 'Dining Hall')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-amber-600 mb-1">
+          <div onclick="selectMapBuilding('Hostel A', 'Boys Block', 'Ground Floor', 'Dining Hall')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-orange-600 mb-1">
               <i class="fa-solid fa-bed text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">Boys</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-orange-100 text-orange-800">Boys</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-amber-700">Hostel A (Boys)</h4>
-            <p class="text-[11px] text-slate-500">Rooms 1-120, Dining Hall, Recreation</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-orange-700">Hostel A (Boys)</h4>
+            <p class="text-[11px] text-stone-500">Rooms 1-120, Dining Hall, Recreation</p>
           </div>
 
-          <div onclick="selectMapBuilding('Hostel B', 'Girls Block', '1st Floor', 'Corridor North')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
+          <div onclick="selectMapBuilding('Hostel B', 'Girls Block', '1st Floor', 'Corridor North')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
             <div class="flex items-center justify-between text-rose-600 mb-1">
               <i class="fa-solid fa-hotel text-lg"></i>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-100 text-rose-800">Girls</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-rose-700">Hostel B (Girls)</h4>
-            <p class="text-[11px] text-slate-500">Rooms 1-120, Study Room, Dining</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-rose-700">Hostel B (Girls)</h4>
+            <p class="text-[11px] text-stone-500">Rooms 1-120, Study Room, Dining</p>
           </div>
 
-          <div onclick="selectMapBuilding('Main Canteen', 'Central Area', 'Ground Floor', 'Dining Area')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-orange-600 mb-1">
+          <div onclick="selectMapBuilding('Main Canteen', 'Central Area', 'Ground Floor', 'Dining Area')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-amber-600 mb-1">
               <i class="fa-solid fa-utensils text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-orange-100 text-orange-800">Dining</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">Dining</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-orange-700">Main Canteen</h4>
-            <p class="text-[11px] text-slate-500">Food Court, Kitchen, Beverage Counters</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-amber-700">Main Canteen</h4>
+            <p class="text-[11px] text-stone-500">Food Court, Kitchen, Beverage Counters</p>
           </div>
 
-          <div onclick="selectMapBuilding('Sports Complex', 'Stadium', 'Ground Floor', 'Pavilion & Indoor Court')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-purple-600 mb-1">
+          <div onclick="selectMapBuilding('Sports Complex', 'Stadium', 'Ground Floor', 'Pavilion & Indoor Court')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-stone-600 mb-1">
               <i class="fa-solid fa-basketball text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-800">Sports</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-100 text-stone-800">Sports</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-purple-700">Sports Complex</h4>
-            <p class="text-[11px] text-slate-500">Gymnasium, Basketball Court, Turf</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-stone-700">Sports Complex</h4>
+            <p class="text-[11px] text-stone-500">Gymnasium, Basketball Court, Turf</p>
           </div>
 
-          <div onclick="selectMapBuilding('Parking Area', 'East Lot', 'Ground Floor', 'Two-Wheeler Section')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition group">
-            <div class="flex items-center justify-between text-teal-600 mb-1">
+          <div onclick="selectMapBuilding('Parking Area', 'East Lot', 'Ground Floor', 'Two-Wheeler Section')" class="cursor-pointer p-3.5 rounded-2xl border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-50 transition group bg-white">
+            <div class="flex items-center justify-between text-orange-600 mb-1">
               <i class="fa-solid fa-square-parking text-lg"></i>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-800">Transit</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-orange-100 text-orange-800">Transit</span>
             </div>
-            <h4 class="font-bold text-slate-800 group-hover:text-teal-700">Parking & Transport</h4>
-            <p class="text-[11px] text-slate-500">Two-Wheeler Lot, Bus Terminal, Gate</p>
+            <h4 class="font-bold text-stone-800 group-hover:text-orange-700">Parking & Transport</h4>
+            <p class="text-[11px] text-stone-500">Two-Wheeler Lot, Bus Terminal, Gate</p>
           </div>
         </div>
 
-        <div class="pt-3 flex justify-end border-t border-slate-200">
-          <button type="button" onclick="closeCampusMapModal()" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">
+        <div class="pt-3 flex justify-end border-t border-orange-100">
+          <button type="button" onclick="closeCampusMapModal()" class="px-5 py-2 bg-orange-50 hover:bg-orange-100 text-stone-700 font-bold rounded-2xl text-xs">
             Cancel
           </button>
         </div>
@@ -1230,12 +1307,12 @@
     </div>
   </div>
 
-  <!-- 9. LINK DUPLICATE TO MASTER COMPLAINT MODAL (Admin & Dept Head) -->
-  <div id="modal-link-duplicate" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-purple-700 text-white flex justify-between items-center">
+  <!-- 9. LINK DUPLICATE TO MASTER COMPLAINT MODAL -->
+  <div id="modal-link-duplicate" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
         <h3 class="text-sm font-bold flex items-center space-x-2">
-          <i class="fa-solid fa-link"></i>
+          <i class="fa-solid fa-link text-orange-400"></i>
           <span>Link to Master Incident</span>
         </h3>
         <button onclick="closeLinkDuplicateModal()" class="text-white/80 hover:text-white p-1 text-lg">
@@ -1245,36 +1322,36 @@
 
       <form id="form-link-duplicate" onsubmit="submitLinkDuplicate(event)" class="p-6 space-y-4 text-xs">
         <input type="hidden" id="link-target-id">
-        <p class="text-slate-600">
+        <p class="text-stone-600">
           Linking a duplicate report groups related complaints under one master ticket without deleting the original student record.
         </p>
 
         <div>
-          <label class="block font-bold text-slate-700 uppercase mb-1">Select Master Complaint *</label>
-          <select id="link-master-select" required class="w-full text-xs rounded-xl border border-slate-300 px-3 py-2.5 font-medium"></select>
+          <label class="block font-bold text-stone-700 uppercase mb-1">Select Master Complaint *</label>
+          <select id="link-master-select" required class="w-full text-xs rounded-2xl border border-stone-300 px-3 py-2.5 font-medium"></select>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 uppercase mb-1">Reason / Note for Link</label>
-          <input type="text" id="link-reason" placeholder="e.g. Same water leakage reported from opposite side of hallway" class="w-full text-xs rounded-xl border border-slate-300 p-2.5">
+          <label class="block font-bold text-stone-700 uppercase mb-1">Reason / Note for Link</label>
+          <input type="text" id="link-reason" placeholder="e.g. Same water leakage reported from opposite side of hallway" class="w-full text-xs rounded-2xl border border-stone-300 p-2.5">
         </div>
 
-        <div class="pt-3 flex justify-end space-x-3 border-t border-slate-200">
-          <button type="button" onclick="closeLinkDuplicateModal()" class="px-4 py-2 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-xs">Link Master Ticket</button>
+        <div class="pt-3 flex justify-end space-x-3 border-t border-stone-200">
+          <button type="button" onclick="closeLinkDuplicateModal()" class="px-4 py-2 text-stone-600 font-semibold hover:bg-stone-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs">Link Master Ticket</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- 10. GUIDED DEMO TOUR MODAL (Section 39 Presentation Script) -->
-  <div id="modal-guided-tour" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="p-5 bg-gradient-to-r from-indigo-700 to-blue-700 text-white flex justify-between items-center">
+  <div id="modal-guided-tour" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-orange-100 overflow-hidden">
+      <div class="p-5 bg-gradient-to-r from-orange-600 to-amber-500 text-white flex justify-between items-center">
         <div>
           <div class="flex items-center space-x-2">
             <span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-md">Presentation Mode</span>
-            <span class="text-xs text-indigo-100" id="tour-step-counter">Step 1 of 5</span>
+            <span class="text-xs text-orange-100" id="tour-step-counter">Step 1 of 5</span>
           </div>
           <h3 class="text-base font-bold mt-1" id="tour-step-title">1. Student Problem Submission</h3>
         </div>
@@ -1284,25 +1361,25 @@
       </div>
 
       <div class="p-6 space-y-4 text-xs">
-        <div id="tour-step-body" class="text-slate-700 leading-relaxed space-y-2">
+        <div id="tour-step-body" class="text-stone-700 leading-relaxed space-y-2">
           <!-- Step Explanation Filled via JS -->
         </div>
 
-        <div class="p-3 bg-blue-50 rounded-2xl border border-blue-200 text-blue-900 flex items-center justify-between">
+        <div class="p-3 bg-orange-50 rounded-2xl border border-orange-200 text-orange-950 flex items-center justify-between">
           <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i>
+            <i class="fa-solid fa-wand-magic-sparkles text-orange-600"></i>
             <span id="tour-action-label" class="font-semibold">Auto-switch account & test</span>
           </div>
-          <button type="button" onclick="executeTourAction()" id="btn-tour-action" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs transition">
+          <button type="button" onclick="executeTourAction()" id="btn-tour-action" class="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs transition">
             Perform Step &rarr;
           </button>
         </div>
 
-        <div class="pt-3 flex justify-between items-center border-t border-slate-200">
-          <button type="button" onclick="prevTourStep()" id="btn-tour-prev" class="px-4 py-2 text-slate-500 font-semibold hover:bg-slate-100 rounded-xl disabled:opacity-30">
+        <div class="pt-3 flex justify-between items-center border-t border-orange-100">
+          <button type="button" onclick="prevTourStep()" id="btn-tour-prev" class="px-4 py-2 text-stone-500 font-semibold hover:bg-orange-50 rounded-xl disabled:opacity-30">
             &larr; Previous
           </button>
-          <button type="button" onclick="nextTourStep()" id="btn-tour-next" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-xs transition">
+          <button type="button" onclick="nextTourStep()" id="btn-tour-next" class="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl shadow-xs transition">
             Next Step &rarr;
           </button>
         </div>
@@ -1311,7 +1388,7 @@
   </div>
 
   <!-- Toast Notification Pill -->
-  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 max-w-sm bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs border border-slate-700">
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 max-w-sm bg-stone-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs border border-stone-700">
     <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
     <span id="toast-msg" class="font-medium">Notification message</span>
   </div>
